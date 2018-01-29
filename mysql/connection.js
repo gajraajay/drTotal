@@ -5,6 +5,4 @@ var mysql = require('mysql');
     user: "root",
     password: ""
   });
-
-
 module.exports=con;
