@@ -1,32 +1,34 @@
-var express= require("express");
-var app= express();
-// app.get('/',function(req,res){
-//   res.send("helloworld");
-// });
-var routes=require('./routes/routes.js');
-var userModle=require('./models/users.js');
-var user=new userModle("a","b","v","v","as");
-var user1=new userModle("a","c","v","v","asad");
-routes.use('/',require('./routes/openRoutes.js'));
+var express = require("express");
+var routes = require('./routes/routes.js');
+var userModle = require('./models/users.js');
+var app = express();
+const Sequelize=require('sequelize');
+const sequelize=require('./mysql/database');
+const UserMeta=sequelize.define("userMeta",{
+  firstName: {
+      type: Sequelize.STRING
+    },
+    lastName: {
+      type: Sequelize.STRING
+    }
+  });
+  UserMeta.sync().then(function(arg1,arg2){
 
-// var user=new userModel('ajay','gajra','a@i.com','1234567890','password');
+    arg1.create({
+      firstName: 'John',
+      lastName: 'Hancock'
+    });
+  });
+UserMeta.findAll().then(users=>{
 
-function myFunction(a,b,c){
-    this.a=a;
-    this.b=b;
-    this.c=c;
-}
-myFunction.prototype.name=function(){
-        return "test"+this.a+this.b+this.c;
-}
+  users.forEach(function(currentValue, index, arr){
+    user=JSON.parse(JSON.stringify(currentValue),true);
+    console.log(user.createdAt);
+  });
+});
+
+routes.use('/api/v1/', require('./routes/openRoutes.js'));
 app.use(routes);
-// var con=require('./mysql/connection.js');
-app.listen(9090,function(){
-    // con.connect(function(){
-    //   console.log("connected");
-    // });
-    var abc= new myFunction("aa","bb","cc");
-    console.log(user.getName());
-    console.log(user1.getName());
-    console.log("conneted"+abc.name());
+
+app.listen(9090, function() {
 });
