@@ -27,9 +27,10 @@ app.post("/validate-user", function(req, res) {
     }).all().then(users => {
       if (users.length == 1) {
         if(users[0].password===md5(md5(req.body.password) + md5(constants.PASS_SALT)+md5(req.body.email))){
-        res.send({
-          "status": 1
-        });}else{
+          date = new Date();
+          res.send({"status":1,auth_key:md5(md5(req.body.password) + md5(constants.PASS_SALT)+md5(req.body.email)+md5(date.getTime()))});
+          //TODO store the key to database and use for future authentication guve it a validity.
+        }else{
           res.statusCode=401;
           res.send({"status":0});
         }
@@ -38,12 +39,7 @@ app.post("/validate-user", function(req, res) {
           "status": 0
         });
 
-      }
-      // users
-      //     .forEach(function(currentValue, index, arr) {
-      //         user = JSON.parse(JSON.stringify(currentValue), true);
-      //         console.log(user.email);
-      //     });
+        }
     }, err => {
       console.log(err);
       res.statusCode = 409;
