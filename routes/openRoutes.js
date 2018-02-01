@@ -8,6 +8,7 @@ app.use(bodyParser.urlencoded({
 }));
 // var con = require('./../mysql/connection.js');
 var Sequelize = require('sequelize');
+var User = require('./../models/user.js');
 var UserMeta = require('./../models/user.js');
 
 
@@ -21,7 +22,7 @@ app.post("/validate-user", function(req, res) {
 
   // console.log(Sequelize.model('Meta'));
   if (req.body.email && req.body.password) {
-    UserMeta.findAll({
+    User.findAll({
       where: {
         email: req.body.email
       }
@@ -29,7 +30,18 @@ app.post("/validate-user", function(req, res) {
       if (users.length == 1) {
         if(users[0].password===md5(md5(req.body.password) + md5(constants.PASS_SALT)+md5(req.body.email))){
           date = new Date();
-          res.send({"status":1,auth_key:md5(md5(req.body.password) + md5(constants.PASS_SALT)+md5(req.body.email)+md5(date.getTime()))});
+          authToken=md5(md5(req.body.password) + md5(constants.PASS_SALT)+md5(req.body.email)+md5(date.getTime()));
+          res.send({status:1,auth_key:authToken});
+          UserMeta.create({
+            authToken:authToken,
+            userId:users[0].user_id,
+            inTime:date.getTime(),
+            timeout:date.getTime()+(12*24*3600)
+          }).then(function(meta){
+                console.log(meta);
+          },function(err){
+              console.log(err);
+          });
           //TODO store the key to database and use for future authentication guve it a validity.
         }else{
           res.statusCode=401;
@@ -62,7 +74,7 @@ app.post("/create-user", function(req, res) {
       primary_email: req.body.email
     };
     date = new Date();
-    UserMeta.create({
+    User.create({
         email: req.body.email,
         password: password,
         user_id: user_id,
