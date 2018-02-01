@@ -17,6 +17,7 @@ app.get("/create-user", function(req, res) {
   res.send("hello world" + req.query.id);
 });
 app.post("/validate-user", function(req, res) {
+  console.log(req.headers);
 
   // console.log(Sequelize.model('Meta'));
   if (req.body.email && req.body.password) {
@@ -93,6 +94,7 @@ app.post("/create-user", function(req, res) {
     //     }
     //
     // });
+
   } else {
     res.statusCode = 400;
     res.send({
