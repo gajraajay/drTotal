@@ -5,10 +5,8 @@ const UserMeta = sequelize.define("UserMeta", {
     authToken:{
         type: Sequelize.STRING,
         primaryKey:true,
-        validate: {
-            allowNull: false,
-            notEmpty: true
-        }
+        allowNull: false,
+        notEmpty: true
     },
     userId: {
         type: Sequelize.STRING,
@@ -17,17 +15,14 @@ const UserMeta = sequelize.define("UserMeta", {
 
     },
     timeout: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
         notEmpty: true
     },
     inTime: {
-        type: Sequelize.STRING,
+        type: Sequelize.INTEGER,
         allowNull: false,
-        notEmpty: true,
-        validate: {
-            isEmail: true
-        }
+        notEmpty: true
     }
 });
 module.exports = UserMeta;
