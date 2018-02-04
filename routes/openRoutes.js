@@ -9,7 +9,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 // var con = require('./../mysql/connection.js');
 var Sequelize = require('sequelize');
 var User = require('./../models/user.js');
-var UserMeta = require('./../models/UserMeta.js');
+var UserSession = require('./../models/UserSession.js');
 
 const Op = Sequelize.Op;
 
@@ -30,8 +30,9 @@ app.post("/validate-user", function(req, res) {
             .then(users => {
                 if (users.length == 1) {
                     if (users[0].password === md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email))) {
+                      console.log(req.cookies);
                         if (req.cookies.dt_auth_token) {
-                            UserMeta
+                            UserSession
                                 .findAll({
                                 where: {
                                     authToken: req.cookies.dt_auth_token
@@ -43,7 +44,7 @@ app.post("/validate-user", function(req, res) {
                                     } else {
                                         date = new Date();
                                         authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
-                                        UserMeta.create({
+                                        UserSession.create({
                                             authToken: authToken,
                                             userId: users[0].user_id,
                                             inTime: date.getTime(),
@@ -67,13 +68,14 @@ app.post("/validate-user", function(req, res) {
                             console.log("notdound");
                             date = new Date();
                             authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
-                            UserMeta.create({
+                            UserSession.create({
                                 authToken: authToken,
                                 userId: users[0].user_id,
                                 inTime: date.getTime(),
                                 timeout: date.getTime() + (12 * 24 * 3600)
                                 })
                                 .then(function(meta) {
+                                  console.log(meta);
                                     res.cookie('dt_auth_token', authToken, {
                                         maxAge: 900000,
                                         httpOnly: false
@@ -121,7 +123,27 @@ app.post("/create-user", function(req, res) {
             reg_time: date.getTime() / 1000
             })
             .then(function(arg1) {
-                res.send({"status": 1});
+              date=new Date();
+              authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
+              cookieKey=md5(authToken+md5(date.getTime()));
+              UserSession.create({
+                  authToken: authToken,
+                  cookieKey:cookieKey,
+                  userId: user_id,
+                  inTime: date.getTime(),
+                  timeout: date.getTime() + (12 * 24 * 3600)
+                  })
+                  .then(function(meta) {
+                    console.log(meta);
+                      res.cookie('dt_auth_key', cookieKey, {
+                          maxAge: 900000,
+                          httpOnly: false
+                      });
+                      res.send({status: 1,auth_token:authToken});
+                  }, function(err) {
+                      console.log(err);
+                      res.send({status: 0});
+                  });
             }, function(arg2, arg1) {
                 res.statusCode = 409;
                 res.send({"status": 0});

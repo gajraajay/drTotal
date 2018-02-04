@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const sequelize = require('./../mysql/database.js');
 
-const UserMeta = sequelize.define("User", {
+const User = sequelize.define("User", {
     id:{
         type: Sequelize.INTEGER,
         primaryKey: true,
@@ -59,4 +59,4 @@ const UserMeta = sequelize.define("User", {
     }
 
 });
-module.exports = UserMeta;
+module.exports = User;

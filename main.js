@@ -4,7 +4,7 @@ var userModle = require('./models/users.js');
 var app = express();
 
 const User = require('./models/user.js');
-const UserMeta = require('./models/UserMeta.js');
+const UserMeta = require('./models/UserSession.js');
 
 routes.use('/api/v1/', require('./routes/openRoutes.js'));
 app.use(routes);
