@@ -51,4 +51,5 @@ app.use("/user/", isValidate);
 app.get('/user/', function(req, res) {
   res.send({"status":req.userid});
 });
+module.exports=app;
 //TODO check the token with user token and validate user.
