@@ -1,3 +1,25 @@
 module.exports={
-  PASS_SALT:'_random_generated_key'
+  PASS_SALT:'_random_generated_key',
+  DOCTOR_ACL:{
+    add_patient:true,
+    select_doctor:false,
+    add_prescription:true,
+    share_profile:true,
+    add_reports:true,
+    upload_files:true,
+    create_hospitals:true,
+    select_hospitals:true,
+    public_profile:true
+  },
+  PATIENT_ACL:{
+    add_patient:false,
+    select_doctor:true,
+    add_prescription:true,
+    share_profile:true,
+    add_reports:true,
+    upload_files:true,
+    create_hospitals:false,
+    select_hospitals:true,
+    public_profile:false
+  }
 }

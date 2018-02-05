@@ -10,6 +10,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 var Sequelize = require('sequelize');
 var User = require('./../models/user.js');
 var UserSession = require('./../models/UserSession.js');
+var roles = require('./../models/roles.js');
 
 const Op = Sequelize.Op;
 
@@ -40,7 +41,6 @@ app.post("/validate-user", function(req, res) {
                                     if (usersMeta.length > 0) {
                                         res.send({status: 1, auth_token: usersMeta[0].authToken});
                                     } else {
-                                        console.log("This if fun");
                                         date = new Date();
                                         authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
                                         cookieKey = md5(authToken + md5(date.getTime()));
@@ -48,8 +48,8 @@ app.post("/validate-user", function(req, res) {
                                             authToken: authToken,
                                             cookieKey: cookieKey,
                                             userId: users[0].user_id,
-                                            inTime: date.getTime()/1000,
-                                            timeout:(date.getTime()/1000)+ (12 * 24 * 3600)
+                                            inTime: date.getTime() / 1000,
+                                            timeout: (date.getTime() / 1000) + (12 * 24 * 3600)
                                             })
                                             .then(function(meta) {
                                                 res.cookie('dt_auth_key', cookieKey, {
@@ -74,8 +74,8 @@ app.post("/validate-user", function(req, res) {
                                 authToken: authToken,
                                 cookieKey: cookieKey,
                                 userId: users[0].user_id,
-                                inTime: date.getTime()/1000,
-                                timeout:(date.getTime()/1000)+ (12 * 24 * 3600)
+                                inTime: date.getTime() / 1000,
+                                timeout: (date.getTime() / 1000) + (12 * 24 * 3600)
                                 })
                                 .then(function(meta) {
                                     res.cookie('dt_auth_key', cookieKey, {
@@ -87,7 +87,6 @@ app.post("/validate-user", function(req, res) {
                                     console.log(err);
                                     res.send({status: 0});
                                 });
-
                         }
 
                         //TODO store the key to database and use for future authentication guve it a validity.
@@ -132,8 +131,8 @@ app.post("/create-user", function(req, res) {
                     authToken: authToken,
                     cookieKey: cookieKey,
                     userId: user_id,
-                    inTime: date.getTime()/1000,
-                    timeout: (date.getTime()/1000)+ (12 * 24 * 3600)
+                    inTime: date.getTime() / 1000,
+                    timeout: (date.getTime() / 1000) + (12 * 24 * 3600)
                     })
                     .then(function(meta) {
                         console.log(meta);
@@ -141,7 +140,19 @@ app.post("/create-user", function(req, res) {
                             maxAge: 900000,
                             httpOnly: false
                         });
-                        res.send({status: 1, auth_token: authToken});
+                        roles
+                            .findAll({where:{
+                                roleId:{
+                                    [Op.gt]: 0,
+                                }
+                            }})
+                            .then(function(userRoles) {
+                                res.send({status: 1, auth_token: authToken, roles: userRoles});
+                            }, function(err) {
+                                console.log(err);
+                                res.send({status: 1, auth_token: authToken});
+                            });
+
                     }, function(err) {
                         console.log(err);
                         res.send({status: 0});
