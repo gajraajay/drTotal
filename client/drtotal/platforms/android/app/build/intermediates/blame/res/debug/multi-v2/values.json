@@ -1,10 +1,32 @@
 {
     "logs": [
         {
-            "outputFile": "/opt/lampp/htdocs/homeproj/drTotal/client/drtotal/platforms/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
+            "outputFile": "G:\\opt\\lampp\\htdocs\\homeproj\\drTotal\\client\\drtotal\\platforms\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
             "map": [
                 {
-                    "source": "/opt/lampp/htdocs/homeproj/drTotal/client/drtotal/platforms/android/app/src/main/res/values/strings.xml",
+                    "source": "G:\\opt\\lampp\\htdocs\\homeproj\\drTotal\\client\\drtotal\\platforms\\android\\app\\src\\main\\res\\values\\strings.xml",
+                    "from": {
+                        "startLines": "4,2,3",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "159,55,100",
+                        "endColumns": "63,44,58",
+                        "endOffsets": "218,95,154"
+                    },
+                    "to": {
+                        "startLines": "2,3,4",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,119,164",
+                        "endColumns": "63,44,58",
+                        "endOffsets": "114,159,218"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "G:\\Projects\\gitDrTotal\\drTotal\\client\\drtotal\\platforms\\android\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+            "map": [
+                {
+                    "source": "G:\\Projects\\gitDrTotal\\drTotal\\client\\drtotal\\platforms\\android\\app\\src\\main\\res\\values\\strings.xml",
                     "from": {
                         "startLines": "4,2,3",
                         "startColumns": "4,4,4",
