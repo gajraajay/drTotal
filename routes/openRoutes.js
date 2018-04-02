@@ -14,7 +14,7 @@ var roles = require('./../models/roles.js');
 
 const Op = Sequelize.Op;
 
-app.post("/demo", function(req, res) {
+app.get("/demo", function(req, res) {
     console.log(req.cookies.cookiename);
     res.send("hello world" + req.query.id);
 });

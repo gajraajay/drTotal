@@ -1,6 +1,6 @@
 var express = require("express");
 var routes = require('./routes/routes.js');
-var userModle = require('./models/users.js');
+// var userModle = require('./models/users.js');
 const CONSTANTS = require('./utils/constants.js');
 var app = express();
 const User = require('./models/user.js');
@@ -9,6 +9,7 @@ const user_role = require('./models/user_roles.js');
 const role = require('./models/roles.js');
 
 routes.use('/api/v1/', require('./routes/openRoutes.js'));
+
 app.use(routes);
 
 app.listen(8081, function() {
