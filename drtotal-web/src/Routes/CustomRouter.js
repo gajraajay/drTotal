@@ -15,9 +15,7 @@ export const CustomRouter = () => (
           <Link to="/signup">Signup</Link>
         </li>
       </ul>
-
       <hr/>
-
       <Route exact path="/" component={() => (
         <h1>Cool</h1>
       )}/>
