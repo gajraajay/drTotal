@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+import LoginPage from '../Login/Components/LoginPage';
 
 export const CustomRouter = () => (
   <Router>
@@ -9,7 +10,7 @@ export const CustomRouter = () => (
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/Login">login</Link>
+          <Link to="/login">login</Link>
         </li>
         <li>
           <Link to="/signup">Signup</Link>
@@ -19,9 +20,7 @@ export const CustomRouter = () => (
       <Route exact path="/" component={() => (
         <h1>Cool</h1>
       )}/>
-      <Route path="/about" component={() => (
-        <h1>Cool1</h1>
-      )}/>
+      <Route path="/login" component={LoginPage}/>
       <Route path="/topics" component={() => (
         <h1>Coo12l</h1>
       )}/>
