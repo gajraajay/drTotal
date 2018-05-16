@@ -1,0 +1,1 @@
+export const CLICK_SIGN_IN_BUTTON='clickSignInButton';
