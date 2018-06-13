@@ -6,7 +6,7 @@ import { LoginPage } from '../Login/Components/Containers/LoginPage';
 export const CustomRouter = () => (
   <Router>
     <div>
-      {/* <ul>
+      <ul>
         <li>
           <Link to="/">Home</Link>
         </li>
@@ -17,7 +17,7 @@ export const CustomRouter = () => (
           <Link to="/signup">Signup</Link>
         </li>
       </ul>
-      <hr/> */}
+      <hr/>
       <Route exact path="/" component={() => (
         <h1>Cool</h1>
       )}/>

@@ -13,10 +13,19 @@ var UserSession = require('./../models/UserSession.js');
 var roles = require('./../models/roles.js');
 
 const Op = Sequelize.Op;
+var addHeader=function(req,res,next){
+    console.log("we are here");
+    res.setHeader('Access-Control-Allow-Origin', '*');     
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');     
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    next();
+}
+app.use(addHeader);
 
-app.get("/demo", function(req, res) {
-    console.log(req.cookies.cookiename);
-    res.send("hello world" + req.query.id);
+app.get("/demo", function(req, res) {     
+       
+        res.send("hello world" + req.query.id);
 });
 app.post("/validate-user", function(req, res) {
     if (req.body.email && req.body.password) {
