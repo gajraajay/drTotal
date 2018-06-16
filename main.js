@@ -8,11 +8,13 @@ const UserMeta = require('./models/UserSession.js');
 const user_role = require('./models/user_roles.js');
 const role = require('./models/roles.js');
 
+
+
 routes.use('/api/v1/', require('./routes/openRoutes.js'));
 
 app.use(routes);
 
-app.listen(8081, function() {
+app.listen(7071, function() {    
     UserMeta
         .sync()
         .then(function(arg1) {

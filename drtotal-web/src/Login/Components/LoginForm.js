@@ -7,35 +7,42 @@ import { CLICK_SIGN_IN_BUTTON } from '../Actions/types';
 class LoginForm extends Component {
 
   constructor(props) {
-    super(props)
-    console.log(this.props);    
+    super(props)  
+    this.handleFormSubmit=this.handleFormSubmit.bind(this);
   }
+  
   handleChange(){
     
     
   }
+
   handleFormSubmit(e){   
-      e.preventDefault();
-      this.props.submitTheForm();
-      console.log("Asfas");  
+      e.preventDefault();      
+      const formData = {};
+      // for (const field in this.refs) {
+      //   console.log(field);
+      //   formData[field] = this.refs[field].value;
+      // }
+      console.log('-->',this.email.value);
+      console.log("Asfas"); 
+    this.props.LoginToServer();
   }
-  componentWillMount() {
-    // this.props.LoginToServer();
-  }
+
   render() {    
     return (                  
-        <Panel>          
+        <Panel>      
+          <div onClick={this.handleFormSubmit}>qw fqwfqwfg qwf qwf </div>    
           <ProgressBar now={this.props.amount} />
           <Panel.Heading>Login with your creadential</Panel.Heading>         
           <Panel.Body>          
-            <form onSubmit={this.props.LoginToServer}>
+            <form onSubmit={this.handleFormSubmit}>
               <FormGroup>           
                 <ControlLabel>UserName/Email</ControlLabel>
-                    <FormControl type="text" placeholder="Enter text"/>            
+                    <FormControl inputRef={(ref) => {this.email = ref}} type="text" placeholder="Enter password"/>            
               </FormGroup>
               <FormGroup>           
                 <ControlLabel>Password</ControlLabel>
-                <FormControl type="password"  placeholder="Enter text"/>                                                 
+                <FormControl inputRef="password" className="formControll"   placeholder="Enter password"/>                                                 
               </FormGroup>           
               
               <FormGroup>                 
@@ -58,20 +65,24 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps=(state,ownProps)=>{
-  ownProps=(state.Login.Login);
-  
-  console.log(ownProps);
+  console.log("lol");
+  ownProps=state.Login.Login; 
   return ownProps;
 };
 
 const mapDispatchToProps=function(dispatch,ownProps){
-    return {submitTheForm:(e) =>{e.preventDefault();dispatch({
-      type:CLICK_SIGN_IN_BUTTON,payload:{
-        login:true
-      }
-    })}}  
+  
+    // return {submitTheForm:(e) =>{e.preventDefault();dispatch({
+    //   type:CLICK_SIGN_IN_BUTTON,payload:{
+    //     login:true
+    //   }
+    // })}}  
+console.log(dispatch);
+console.log(ownProps);
+    return {};
   
 }
+// export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
 export default connect(mapStateToProps, { LoginToServer })(LoginForm)
 // export default connect(mapStateToProps,)(LoginForm);
 // export default connect(,  { LoginToServer })(LoginForm);

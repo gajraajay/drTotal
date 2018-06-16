@@ -3,12 +3,11 @@ import {
 } from "../Actions/types";
 
 const initialState = {};
-const LoginReducer = (state = initialState, action) => {
-    console.log(action);
+const LoginReducer = (state = initialState, action) => {    
     switch (action.type) {
         case CLICK_SIGN_IN_BUTTON:
             {
-
+                
                 return { ...state,
                     Login: action.payload
                 }
@@ -18,7 +17,7 @@ const LoginReducer = (state = initialState, action) => {
             {
                 console.log("signib button clicked default");
                 return { ...state,
-                    login: action.payload
+                    Login: action.payload
                 };
 
 
