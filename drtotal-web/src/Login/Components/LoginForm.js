@@ -8,6 +8,7 @@ class LoginForm extends Component {
 
   constructor(props) {
     super(props)  
+    console.log("this is default prop",props);
     this.handleFormSubmit=this.handleFormSubmit.bind(this);
   }
   
@@ -65,8 +66,8 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps=(state,ownProps)=>{
-  console.log("lol");
   ownProps=state.Login.Login; 
+  console.log("this is props too",ownProps);
   return ownProps;
 };
 

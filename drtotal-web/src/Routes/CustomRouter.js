@@ -3,8 +3,10 @@ import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 // import LoginForm from '../Login/Components/LoginForm';
 import { LoginPage } from '../Login/Components/Containers/LoginPage';
 
-export const CustomRouter = () => (
-  <Router>
+export const CustomRouter = () => {
+if( localStorage.getItem("isLogin")){
+  console.log("inside if ");
+  return(<Router>
     <div>
       <ul>
         <li>
@@ -26,5 +28,13 @@ export const CustomRouter = () => (
         <h1>Coo12l</h1>
       )}/>
     </div>
-  </Router>
-)
+  </Router>);
+} else{
+  console.log("inside else");
+  return(<Router>
+      <div><Route path="/login" component={LoginPage}/></div>
+     </Router>)
+  
+}
+  
+}
