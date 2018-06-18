@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {Button, ProgressBar,FieldGroup,FormControl,Col,Row,FormGroup ,code ,ControlLabel,HelpBlock,Panel,Checkbox}  from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 import { connect } from 'react-redux';
-import {LoginToServer} from '../Actions/LoginActions';
-import { CLICK_SIGN_IN_BUTTON } from '../Actions/types';
+import {LoginToServer} from '../../Actions/LoginActions';
+
 class LoginForm extends Component {
 
   constructor(props) {
@@ -30,7 +30,10 @@ class LoginForm extends Component {
   }
 
   render() {    
-    return (                  
+    return (    
+      <Col xs={12}  md={4} mdOffset={4}>
+      
+  
         <Panel>      
           <div onClick={this.handleFormSubmit}>qw fqwfqwfg qwf qwf </div>    
           <ProgressBar now={this.props.amount} />
@@ -59,7 +62,7 @@ class LoginForm extends Component {
           </form>            
           </Panel.Body>          
     </Panel>
-      
+      </Col>
       
     );
   }

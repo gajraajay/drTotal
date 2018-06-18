@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 // import LoginForm from '../Login/Components/LoginForm';
-import { LoginPage } from '../Login/Components/Containers/LoginPage';
+import { LoginPage } from '../Login/Components/Containers/LoginContainer';
 
 export const CustomRouter = () => {
 if( localStorage.getItem("isLogin")){

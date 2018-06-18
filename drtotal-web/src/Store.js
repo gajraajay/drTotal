@@ -10,6 +10,6 @@ import thunk from 'redux-thunk'
 const firstState={};
 const initialState = {"init":true};
 const middleWares = [thunk]; 
-const store = createStore(RootReducer,  composeWithDevTools(applyMiddleware(...middleWares)));
+const store = createStore(RootReducer, initialState,composeWithDevTools(applyMiddleware(...middleWares)));
 
 export default store;
