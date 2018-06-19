@@ -1,5 +1,5 @@
 import {
-    CLICK_SIGN_IN_BUTTON
+    LOGIN_FAIL,LOGIN_SUCCESS
 } from "../Actions/types";
 
 const initialState = {};
@@ -7,27 +7,26 @@ const LoginReducer = (state = initialState, action) => {
     
     switch (action.type) {
         
-        case CLICK_SIGN_IN_BUTTON:            
-        
-            state={...state,abc:{'abc':'fun'}}            
+        case LOGIN_SUCCESS:            
+                    
             
-            state= {...state,"Login":action.payload};
             
             {                
-                return { ...state,
-                    Login: action.payload,
-                    abc:'pqr',
-                    pqr:'abc'
+                return { ...state,... action.payload
                 }
 
             }
-        default:
+        case LOGIN_FAIL:
             {
-                return { ...state,
-                    Login: action.payload
-                };
+                return { ...state,...action.payload,error:'all is needed'}
+            
 
 
+                break;
+            }
+         default :{ 
+            console.log("we are here");
+            return{...state}
             }
 
     }

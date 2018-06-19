@@ -16,13 +16,16 @@ class LoginForm extends Component {
     handleFormSubmit(e){   
       e.preventDefault();      
       const formData = {};      
-      this.props.LoginToServer();
+      this.props.LoginToServer(this.email.value,this.password.value);
   
   }
 
   render() {    
     return (    
       <Col xs={12}  md={4} mdOffset={4}>
+      <div>
+        {this.props.errorCode}
+      </div>
             <form className="" onSubmit={this.handleFormSubmit}>
               <FormGroup>           
                 <ControlLabel>UserName/Email</ControlLabel>
@@ -49,7 +52,7 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps=(state,ownProps)=>{  
-  console.log(state.Login);
+  console.log("props",state.Login);
   ownProps=state.Login;  
   if(ownProps)
   return ownProps;

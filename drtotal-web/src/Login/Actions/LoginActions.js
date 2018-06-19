@@ -1,8 +1,8 @@
-import { CLICK_SIGN_IN_BUTTON } from "./types";
+import { LOGIN_FAIL,LOGIN_SUCCESS } from "./types";
 import axios from 'axios';
 
 export function LoginToServer(email,password) {
-
+console.log("we say it email and password",email+password);
     if(email && password){
 
     
@@ -14,7 +14,9 @@ export function LoginToServer(email,password) {
             case 200:      
             console.log(res.data)
             dispatch({
-                type :'SOmething','payload':'yes'
+                type :LOGIN_SUCCESS,'payload':{
+                    login:true
+                }
             });
                 break;
             case 400:
@@ -31,14 +33,21 @@ export function LoginToServer(email,password) {
 
     }
 }else{
+    var error='';
+    if(email){
+        error="email is needed";
+    }else if(password){
+        error="password needed";
+    }else{
+    error="bothneeded";
+    }
     return (dispatch)=>dispatch({
-        type: CLICK_SIGN_IN_BUTTON,'payload':{
+        type: LOGIN_FAIL,'payload':{
             login:false,
-            error:'all fileds are needed'
-        }
-
-        
+            errorCode:error
+        } 
     });
+     
 }
   
 };
