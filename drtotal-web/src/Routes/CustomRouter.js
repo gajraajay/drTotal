@@ -4,8 +4,7 @@ import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import { LoginPage } from '../Login/Components/Containers/LoginContainer';
 
 export const CustomRouter = () => {
-if( localStorage.getItem("isLogin")){
-  console.log("inside if ");
+
   return(<Router>
     <div>
       <ul>
@@ -13,7 +12,7 @@ if( localStorage.getItem("isLogin")){
           <Link to="/">Home</Link>
         </li>
         <li>
-          <Link to="/login">login</Link>
+          <Link to="/login">LoginPage</Link>
         </li>
         <li>
           <Link to="/signup">Signup</Link>
@@ -28,13 +27,7 @@ if( localStorage.getItem("isLogin")){
         <h1>Coo12l</h1>
       )}/>
     </div>
-  </Router>);
-} else{
-  console.log("inside else");
-  return(<Router>
-      <div><Route path="/login" component={LoginPage}/></div>
-     </Router>)
-  
-}
+  </Router>);  
+
   
 }

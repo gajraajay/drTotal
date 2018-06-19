@@ -5,89 +5,61 @@ import { connect } from 'react-redux';
 import {LoginToServer} from '../../Actions/LoginActions';
 
 class LoginForm extends Component {
-
   constructor(props) {
-    super(props)  
-    console.log("this is default prop",props);
+    super(props)          
     this.handleFormSubmit=this.handleFormSubmit.bind(this);
   }
+  static defaultProps = {
+    displayprop: 'show'
+ };
   
-  handleChange(){
-    
-    
-  }
-
-  handleFormSubmit(e){   
+    handleFormSubmit(e){   
       e.preventDefault();      
-      const formData = {};
-      // for (const field in this.refs) {
-      //   console.log(field);
-      //   formData[field] = this.refs[field].value;
-      // }
-      console.log('-->',this.email.value);
-      console.log("Asfas"); 
-    this.props.LoginToServer();
+      const formData = {};      
+      this.props.LoginToServer();
+  
   }
 
   render() {    
     return (    
       <Col xs={12}  md={4} mdOffset={4}>
-      
-  
-        <Panel>      
-          <div onClick={this.handleFormSubmit}>qw fqwfqwfg qwf qwf </div>    
-          <ProgressBar now={this.props.amount} />
-          <Panel.Heading>Login with your creadential</Panel.Heading>         
-          <Panel.Body>          
-            <form onSubmit={this.handleFormSubmit}>
+            <form className="" onSubmit={this.handleFormSubmit}>
               <FormGroup>           
                 <ControlLabel>UserName/Email</ControlLabel>
                     <FormControl inputRef={(ref) => {this.email = ref}} type="text" placeholder="Enter password"/>            
               </FormGroup>
               <FormGroup>           
                 <ControlLabel>Password</ControlLabel>
-                <FormControl inputRef="password" className="formControll"   placeholder="Enter password"/>                                                 
-              </FormGroup>           
-              
+                <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
+              </FormGroup>
               <FormGroup>                 
                   <Checkbox>Remember me</Checkbox>                  
               </FormGroup>
-
               <FormGroup>                             
                 <Button  bsStyle="primary" type="submit">Sign in</Button>                
               </FormGroup>            
               <FormGroup>                             
                 <Col xs={12}> Do not have an Account? <Link to='/signup'>Create Account!</Link></Col>
               </FormGroup>                             
-          </form>            
-          </Panel.Body>          
-    </Panel>
+          </form>
       </Col>
       
     );
   }
 }
 
-const mapStateToProps=(state,ownProps)=>{
-  ownProps=state.Login.Login; 
-  console.log("this is props too",ownProps);
+const mapStateToProps=(state,ownProps)=>{  
+  console.log(state.Login);
+  ownProps=state.Login;  
+  if(ownProps)
   return ownProps;
+  else{
+    return {}
+  }
+  
 };
 
 const mapDispatchToProps=function(dispatch,ownProps){
-  
-    // return {submitTheForm:(e) =>{e.preventDefault();dispatch({
-    //   type:CLICK_SIGN_IN_BUTTON,payload:{
-    //     login:true
-    //   }
-    // })}}  
-console.log(dispatch);
-console.log(ownProps);
-    return {};
-  
+    return {};  
 }
-// export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
-export default connect(mapStateToProps, { LoginToServer })(LoginForm)
-// export default connect(mapStateToProps,)(LoginForm);
-// export default connect(,  { LoginToServer })(LoginForm);
-
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
