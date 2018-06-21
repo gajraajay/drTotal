@@ -15,19 +15,35 @@ var roles = require('./../models/roles.js');
 const Op = Sequelize.Op;
 var addHeader=function(req,res,next){
     console.log("we are here");
-    res.setHeader('Access-Control-Allow-Origin', '*');     
+    try{
+        res.setHeader('Access-Control-Allow-Origin', req.headers.origin);     
+    }catch(e){
+        res.setHeader('Access-Control-Allow-Origin', req.headers.host);     
+            console.log(e);
+    }
+    
+
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');     
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type','withCredentials');
     res.setHeader('Access-Control-Allow-Credentials', true);
+    
     next();
 }
 app.use(addHeader);
 
 app.get("/demo", function(req, res) {     
        
-        res.send("hello world" + req.query.id);
+    res.cookie('dt_auth_key', 'helloworld', {
+        maxAge: 900000,
+        httpOnly: false,
+        domain:'localhost'
+    })
+        res.send("hello world");
 });
 app.post("/validate-user", function(req, res) {
+    console.log("this is coockie");
+    console.log(req.cookies);
+    console.log(req);
     if (req.body.email && req.body.password) {
         User
             .findAll({
@@ -39,6 +55,7 @@ app.post("/validate-user", function(req, res) {
             .then(users => {
                 if (users.length == 1) {
                     if (users[0].password === md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email))) {
+                        console.log(req.cookies);
                         if (req.cookies.dt_auth_key) {
                             UserSession
                                 .findAll({
@@ -63,7 +80,8 @@ app.post("/validate-user", function(req, res) {
                                             .then(function(meta) {
                                                 res.cookie('dt_auth_key', cookieKey, {
                                                     maxAge: 900000,
-                                                    httpOnly: false
+                                                    httpOnly: false,
+                                                    domain:req.headers.origin
                                                 });
                                                 res.send({status: 1, auth_token: authToken});
                                             }, function(err) {
@@ -89,7 +107,8 @@ app.post("/validate-user", function(req, res) {
                                 .then(function(meta) {
                                     res.cookie('dt_auth_key', cookieKey, {
                                         maxAge: 900000,
-                                        httpOnly: false
+                                        httpOnly: false,                     
+                                        domain:req.headers.origin                   
                                     });
                                     res.send({status: 1, auth_token: authToken});
                                 }, function(err) {
@@ -113,6 +132,9 @@ app.post("/validate-user", function(req, res) {
 
             });
 
+    }else {
+        res.statusCode = 400;
+        res.send({"status": 0});
     }
 
 });

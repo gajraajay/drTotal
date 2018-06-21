@@ -7,22 +7,16 @@ const LoginReducer = (state = initialState, action) => {
     
     switch (action.type) {
         
-        case LOGIN_SUCCESS:            
-                    
-            
-            
+        case LOGIN_SUCCESS: 
             {                
-                return { ...state,... action.payload
+                return { ... action.payload
                 }
 
             }
         case LOGIN_FAIL:
             {
-                return { ...state,...action.payload,error:'all is needed'}
-            
-
-
-                break;
+                return { ...action.payload}
+                 break;
             }
          default :{ 
             console.log("we are here");
