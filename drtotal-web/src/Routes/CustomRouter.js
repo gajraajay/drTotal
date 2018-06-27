@@ -23,8 +23,8 @@ export const CustomRouter = () => {
         <h1>Cool</h1>
       )}/>
       <Route path="/login" component={LoginPage}/>
-      <Route path="/signup" component={(something) => (
-        <LoginPage type='sigun'>        
+      <Route path="/signup" component={() => (
+        <LoginPage errorCode='this is something fishi' type='signup'>        
         </LoginPage>
         
         

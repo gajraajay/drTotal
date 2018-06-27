@@ -7,10 +7,54 @@ import cookie from 'react-cookies'
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // axios.defaults.headers.post['withCredentials'] = true;
 // axios.defaults.withCredentials = true;
+export function SignUpToServer(email,password,confirmPassword){
+    var payload={
+        login: false,
+        data: '',
+        error: 'error',
+        errorCode: 'error'
+    }
+    if(email && password && confirmPassword){
+        console.log(password,confirmPassword);
+        if(password!=confirmPassword){
+        payload={login: false,
+            data: '',errorCode:'not matching'}
+        }else{
+            
+payload={login: true,
+    data: ''}
+        }
+    }else{
+
+        if(email.trim()==''){
+            console.log("here 1");
+            payload.errorCode='email needed';
+        }
+        else if(password.trim()==''){
+            console.log("here 2");
+            payload.errorCode='password needed';
+        }
+        else if(confirmPassword.trim()==''){
+            console.log("here 3");
+            payload.errorCode='Confirm Password needed';
+        }else{
+            console.log("here 4");
+            payload.errorCode='All field neded';
+        }
+        
+    }
+    console.log({
+        type: type,
+        'payload': payload
+    });
+    return (dispatch) => dispatch({
+        type: LOGIN_FAIL,
+        'payload': payload
+    });
+    
+}
 export function LoginToServer(email, password) {
     if (email && password) {
-
-
         return (dispatch) => {
             console.log(JSON.stringify({
                 email: email,

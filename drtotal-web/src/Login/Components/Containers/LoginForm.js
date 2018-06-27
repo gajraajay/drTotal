@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Button, ProgressBar,FieldGroup,FormControl,Col,Row,FormGroup ,code ,ControlLabel,HelpBlock,Panel,Checkbox}  from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 import { connect } from 'react-redux';
-import {LoginToServer} from '../../Actions/LoginActions';
+// import {LoginToServer} from '../../Actions/LoginActions';
 
 class LoginForm extends Component {
   constructor(props) {
@@ -15,16 +15,23 @@ class LoginForm extends Component {
     displayprop: 'show'
  };
   
-    handleFormSubmit(e){   
+    handleFormSubmit(e){  
       e.preventDefault();      
-      const formData = {};      
+      const formData = {};  
+      if(this.props.type=="signup")    {
+        this.props.SignUpToServer(this.email.value,this.password.value,this.cnfPassword.value);
+
+        // this.props.dispatch();
+      }else{
       this.props.LoginToServer(this.email.value,this.password.value);
+    }
   
   }
 
   render() {    
     console.log("before rndor");
     console.log(this.props.type);
+    if(this.props.type!='signup'){
     return (    
       <Col xs={12}  md={4} mdOffset={4}>
       <div>
@@ -52,6 +59,30 @@ class LoginForm extends Component {
       </Col>
       
     );
+  }else{
+    return(<Col xs={12}  md={4} mdOffset={4}>
+      <div>
+        {this.props.errorCode}
+      </div>
+            <form className="" onSubmit={this.handleFormSubmit}>
+              <FormGroup>           
+                <ControlLabel>UserName/Email</ControlLabel>
+                    <FormControl inputRef={(ref) => {this.email = ref}} type="text" placeholder="Email/ Mobile #"/>            
+              </FormGroup>
+              <FormGroup>           
+                <ControlLabel>Password</ControlLabel>
+                <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Password"/>                                                 
+              </FormGroup>
+              <FormGroup>           
+                <ControlLabel>Password</ControlLabel>
+                <FormControl inputRef={(ref)=>{this.cnfPassword=ref}} className="formControll"   type="password" placeholder=" Retype password"/>                                                 
+              </FormGroup>
+              <FormGroup>                             
+                <Button  bsStyle="primary" type="submit">Enroll me</Button>                
+              </FormGroup> 
+          </form>
+      </Col>);
+  }
   }
 }
 
@@ -66,6 +97,7 @@ const mapStateToProps=(state,ownProps)=>{
 };
 
 const mapDispatchToProps=function(dispatch,ownProps){
-    return {};  
+  dispatch(ownProps);
+    return {dispatch:dispatch};  
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
