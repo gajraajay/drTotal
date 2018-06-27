@@ -23,8 +23,11 @@ export const CustomRouter = () => {
         <h1>Cool</h1>
       )}/>
       <Route path="/login" component={LoginPage}/>
-      <Route path="/signup" component={() => (
-        <h1>Coo12l</h1>
+      <Route path="/signup" component={(something) => (
+        <LoginPage type='sigun'>        
+        </LoginPage>
+        
+        
       )}/>
     </div>
   </Router>);  

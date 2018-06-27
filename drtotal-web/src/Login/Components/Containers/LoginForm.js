@@ -6,7 +6,9 @@ import {LoginToServer} from '../../Actions/LoginActions';
 
 class LoginForm extends Component {
   constructor(props) {
+    
     super(props)          
+    console.log(props);
     this.handleFormSubmit=this.handleFormSubmit.bind(this);
   }
   static defaultProps = {
@@ -21,6 +23,8 @@ class LoginForm extends Component {
   }
 
   render() {    
+    console.log("before rndor");
+    console.log(this.props.type);
     return (    
       <Col xs={12}  md={4} mdOffset={4}>
       <div>
@@ -51,8 +55,7 @@ class LoginForm extends Component {
   }
 }
 
-const mapStateToProps=(state,ownProps)=>{  
-  console.log("props",state.Login);
+const mapStateToProps=(state,ownProps)=>{    
   ownProps=state.Login;  
   if(ownProps)
   return ownProps;

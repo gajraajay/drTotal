@@ -5,7 +5,9 @@ import LoginForm from "./LoginForm";
 import { connect } from 'react-redux';
 import {LoginToServer} from '../../Actions/LoginActions';
 
+
 const mapStateToProps = (state, ownProps) => {
+  console.log(ownProps);
   return {}
 }
 

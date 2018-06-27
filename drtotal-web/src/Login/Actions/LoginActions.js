@@ -29,10 +29,8 @@ export function LoginToServer(email, password) {
 
                         case 200:
                         console.log(res);
-                        localStorage.setItem('key',JSON.stringify(res));
-                        cookie.save('mycoockies', JSON.stringify(res), { path: '/' })
-
-
+                        localStorage.setItem('key',JSON.stringify(res.data.auth_token));
+                        cookie.save('dt_auth_key', res.data.auth_token, { path: '/' })
                             dispatch({
                                 type: LOGIN_SUCCESS,
                                 'payload': {
@@ -41,7 +39,7 @@ export function LoginToServer(email, password) {
                                 }
                             });
                             break;
-                        case 400:
+                        case 401:
 
                             break;
                         default:

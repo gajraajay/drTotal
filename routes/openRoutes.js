@@ -40,10 +40,8 @@ app.get("/demo", function(req, res) {
     })
         res.send("hello world");
 });
-app.post("/validate-user", function(req, res) {
-    console.log("this is coockie");
-    console.log(req.cookies);
-    console.log(req);
+app.post("/validate-user", function(req, res) {    
+    
     if (req.body.email && req.body.password) {
         User
             .findAll({
@@ -55,7 +53,7 @@ app.post("/validate-user", function(req, res) {
             .then(users => {
                 if (users.length == 1) {
                     if (users[0].password === md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email))) {
-                        console.log(req.cookies);
+                        console.log(req.cookies.dt_auth_key);
                         if (req.cookies.dt_auth_key) {
                             UserSession
                                 .findAll({
@@ -63,7 +61,7 @@ app.post("/validate-user", function(req, res) {
                                     cookieKey: req.cookies.dt_auth_key
                                 }
                             })
-                                .then(usersMeta => {
+                                .then(usersMeta => {                                    
                                     if (usersMeta.length > 0) {
                                         res.send({status: 1, auth_token: usersMeta[0].authToken});
                                     } else {
@@ -83,6 +81,7 @@ app.post("/validate-user", function(req, res) {
                                                     httpOnly: false,
                                                     domain:req.headers.origin
                                                 });
+                                                console.log(req.ip);
                                                 res.send({status: 1, auth_token: authToken});
                                             }, function(err) {
                                                 res.send({status: 0, error: err});
