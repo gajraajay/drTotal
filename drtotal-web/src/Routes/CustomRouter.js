@@ -22,7 +22,12 @@ export const CustomRouter = () => {
       <Route exact path="/" component={() => (
         <h1>Cool</h1>
       )}/>
-      <Route path="/login" component={LoginPage}/>
+      <Route path="/login" component={() => (
+        <LoginPage errorCode='this is something fishi' type='login'>        
+        </LoginPage>
+        
+        
+      )}/>
       <Route path="/signup" component={() => (
         <LoginPage errorCode='this is something fishi' type='signup'>        
         </LoginPage>

@@ -43,10 +43,7 @@ payload={login: true,
         }
         
     }
-    console.log({
-        type: type,
-        'payload': payload
-    });
+   
     return (dispatch) => dispatch({
         type: LOGIN_FAIL,
         'payload': payload
