@@ -20,10 +20,43 @@ export function SignUpToServer(email,password,confirmPassword){
         payload={login: false,
             data: '',errorCode:'not matching'}
         }else{
+           return(dispatch)=>{ const params = new URLSearchParams();
+            params.append('email', email);
+            params.append('password', password);
             
+            axios.post(
+                'http://localhost:7071/api/v1/create-user', params, { withCredentials: true })
+            .then(res => {                    
+                switch (res.status) {
+
+                    case 200:
+                    console.log(res);
+                    localStorage.setItem('key',JSON.stringify(res.data.auth_token));
+                    cookie.save('dt_auth_key', res.data.auth_token, { path: '/' })
+                        dispatch({
+                            type: LOGIN_SUCCESS,
+                            'payload': {
+                                login: true,
+                                data: res.data
+                            }
+                        });
+                        break;
+                    case 401:
+
+                        break;
+                    default:
+
+
+                        break;
+                }
+
+            });
+        }
 payload={login: true,
     data: ''}
         }
+        
+   
     }else{
 
         if(email.trim()==''){
@@ -42,12 +75,13 @@ payload={login: true,
             payload.errorCode='All field neded';
         }
         
-    }
-   
+        
     return (dispatch) => dispatch({
         type: LOGIN_FAIL,
         'payload': payload
     });
+    }
+   
     
 }
 export function LoginToServer(email, password) {

@@ -30,7 +30,7 @@ class LoginForm extends Component {
 
   render() {    
     console.log("before rndor");
-    console.log(this.props.type);
+    console.log(this.props);
     if(this.props.type!='signup'){
     return (    
       <Col xs={12}  md={4} mdOffset={4}>
@@ -97,7 +97,6 @@ const mapStateToProps=(state,ownProps)=>{
 };
 
 const mapDispatchToProps=function(dispatch,ownProps){
-  dispatch(ownProps);
-    return {dispatch:dispatch};  
+    return {...ownProps,dispatch:dispatch};  
 }
 export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
