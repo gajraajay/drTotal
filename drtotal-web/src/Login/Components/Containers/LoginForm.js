@@ -29,8 +29,19 @@ class LoginForm extends Component {
   }
 
   render() {    
-    console.log("before rndor");
     console.log(this.props);
+    console.log("before rndor");
+    
+
+    if(this.props.Login.login==true){
+      if(this.props.data.status==1){
+        console.log(this.props.data.roles);
+        this.props={...this.props,showRoles:true}
+        console.log(this.props);
+      }
+    }else{
+      console.log("not login");
+    }
     if(this.props.type!='signup'){
     return (    
       <Col xs={12}  md={4} mdOffset={4}>
@@ -59,6 +70,13 @@ class LoginForm extends Component {
       </Col>
       
     );
+  }else if(this.props.showRoles==true){
+    
+  return(<Col xs={12}  md={4} mdOffset={4}>SELECT PROPER OPTION{ this.props.data.roles.map(function(object, i){
+    
+    return <div><a href="#">{JSON.stringify(object.roleName)}</a></div>
+})}
+</Col>);
   }else{
     return(<Col xs={12}  md={4} mdOffset={4}>
       <div>

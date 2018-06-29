@@ -41,22 +41,27 @@ export function SignUpToServer(email,password,confirmPassword){
                             }
                         });
                         break;
-                    case 401:
-
+                    case 409:
+                    dispatch({
+                        type: LOGIN_FAIL,
+                        'payload': {
+                            login: false,
+                            data: res.data
+                        }
+                    });
                         break;
                     default:
-
 
                         break;
                 }
 
+            },(error)=>{                
+                dispatch({
+                    type: LOGIN_FAIL,
+                    'payload': payload
+                });                
             });
-        }
-payload={login: true,
-    data: ''}
-        }
-        
-   
+        }}
     }else{
 
         if(email.trim()==''){
