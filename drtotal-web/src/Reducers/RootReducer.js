@@ -3,11 +3,6 @@ import LoginReducer from "../Login/Reducers/LoginReducer";
 
  const RootReducer=
          combineReducers({ 
-                Login:LoginReducer,
-                Hello: (state)=>{
-                        return { ...state,
-                                hello:'done'
-                            };
-                }
+                Login:LoginReducer
        });
 export default RootReducer;

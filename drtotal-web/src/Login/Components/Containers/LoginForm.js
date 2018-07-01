@@ -5,10 +5,20 @@ import { connect } from 'react-redux';
 // import {LoginToServer} from '../../Actions/LoginActions';
 
 class LoginForm extends Component {
-  constructor(props) {
+
+  
+  clearNotification(e,props){
+    // e.set('validationState',null)
+    console.log("we are here",JSON.stringify(e));    
+      // this.props.UpdateNotification(this.props);
+      // this.props={...this.props,emailStatus:''}
+
     
+  }
+  constructor(props) {    
     super(props)          
     console.log(props);
+    this.clearNotification=this.clearNotification.bind(this);
     this.handleFormSubmit=this.handleFormSubmit.bind(this);
   }
   static defaultProps = {
@@ -35,9 +45,11 @@ class LoginForm extends Component {
 
     if(this.props.Login.login==true){
       if(this.props.data.status==1){
-        console.log(this.props.data.roles);
-        this.props={...this.props,showRoles:true}
-        console.log(this.props);
+
+
+        // console.log(this.props.data.roles);
+        // this.props={...this.props,showRoles:true}
+        // console.log(this.props);
       }
     }else{
       console.log("not login");
@@ -46,14 +58,14 @@ class LoginForm extends Component {
     return (    
       <Col xs={12}  md={4} mdOffset={4}>
       <div>
-        {this.props.errorCode}
+        {this.props.errorMessage}
       </div>
             <form className="" onSubmit={this.handleFormSubmit}>
-              <FormGroup>           
+              <FormGroup validationState={this.emailStatus}>           
                 <ControlLabel>UserName/Email</ControlLabel>
-                    <FormControl inputRef={(ref) => {this.email = ref}} type="text" placeholder="Enter password"/>            
+                    <FormControl inputRef={(ref) => {this.email = ref}} type="text"  onChange={this.clearNotification} placeholder="Enter Email/ UserName"/>            
               </FormGroup>
-              <FormGroup>           
+              <FormGroup validationState={this.passwordStatus}>           
                 <ControlLabel>Password</ControlLabel>
                 <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
               </FormGroup>
@@ -80,7 +92,7 @@ class LoginForm extends Component {
   }else{
     return(<Col xs={12}  md={4} mdOffset={4}>
       <div>
-        {this.props.errorCode}
+        {this.props.errorMessage}
       </div>
             <form className="" onSubmit={this.handleFormSubmit}>
               <FormGroup>           

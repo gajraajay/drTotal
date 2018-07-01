@@ -19,8 +19,7 @@ const LoginReducer = (state = initialState, action) => {
                  break;
             }
          default :{ 
-            console.log("we are here");
-            return{...state}
+            return{...action.payload}
             }
 
     }
