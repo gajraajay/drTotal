@@ -6,13 +6,15 @@ import {Navbar, NavItem,NavDropdown,MenuItem,Nav,Row,FormGroup ,code ,ControlLab
 
 export const CustomRouter=()=> <Router>
 <div>
-  <NavBar />
-  <Route exact path="/" component={() => (
+  
+
+  <Route exact path="/" component={() => (    
     <h1>Cool</h1>
   )}/>
-  <Route path="/login" component={() => (
-    <LoginPage errorCode='this is something fishi' type='login'>        
-    </LoginPage>
+  <Route path="/login" component={() => (    
+      <LoginPage errorCode='this is something fishi' type='login'>    
+      </LoginPage>
+    
     
     
   )}/>
@@ -24,22 +26,20 @@ export const CustomRouter=()=> <Router>
 </Router>
 
 export const NavBar = () => {
-
   return(
-<Navbar inverse collapseOnSelect>
-  <Navbar.Header>
-    <Navbar.Brand>
-      <a href="#brand">React-Bootstrap</a>
-    </Navbar.Brand>
-    <Navbar.Toggle />
-  </Navbar.Header>
-  <Navbar.Collapse>
+  <Navbar inverse collapseOnSelect>
+    <Navbar.Header>
+      <Navbar.Brand>
+        <a href="#brand">React-Bootstrap</a>
+      </Navbar.Brand>
+      <Navbar.Toggle />
+    </Navbar.Header>
+    <Navbar.Collapse>
     <Nav>
     <NavItem componentClass={Link} href="/login" to="/login">Login
     </NavItem>
     <NavItem componentClass={Link} href="/signup" to="/signup">SignUp
-    </NavItem>
-    
+    </NavItem>    
       <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
         <MenuItem eventKey={3.1}>Action</MenuItem>
         <MenuItem eventKey={3.2}>Another action</MenuItem>
@@ -58,7 +58,5 @@ export const NavBar = () => {
     </Nav>
   </Navbar.Collapse>
 </Navbar> 
-);  
-
-  
+  );  
 }

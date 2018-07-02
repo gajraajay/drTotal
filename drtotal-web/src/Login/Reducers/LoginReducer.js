@@ -16,10 +16,10 @@ const LoginReducer = (state = initialState, action) => {
         case LOGIN_FAIL:
             {
                 return { ...action.payload}
-                 break;
+                 
             }
          default :{ 
-            return{...action.payload}
+            return{...state,...action.payload}            
             }
 
     }

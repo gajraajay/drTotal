@@ -6,3 +6,8 @@ body {
 .hide{
   display: none;
 }
+
+.loginPanel{
+  position: relative;
+  top:100px;;
+}

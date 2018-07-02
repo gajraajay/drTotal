@@ -1,20 +1,11 @@
 import React, {Component} from 'react';
-import {Button, ProgressBar,FieldGroup,FormControl,Col,Row,FormGroup ,code ,ControlLabel,HelpBlock,Panel,Checkbox}  from 'react-bootstrap';
+import {Button, ProgressBar,FieldGroup,FormControl,Col,Row,FormGroup ,code ,Alert,ControlLabel,HelpBlock,Panel,Checkbox}  from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 import { connect } from 'react-redux';
 // import {LoginToServer} from '../../Actions/LoginActions';
 
 class LoginForm extends Component {
 
-  
-  clearNotification(e,props){
-    // e.set('validationState',null)
-    console.log("we are here",JSON.stringify(e));    
-      // this.props.UpdateNotification(this.props);
-      // this.props={...this.props,emailStatus:''}
-
-    
-  }
   constructor(props) {    
     super(props)          
     console.log(props);
@@ -22,11 +13,15 @@ class LoginForm extends Component {
     this.handleFormSubmit=this.handleFormSubmit.bind(this);
   }
   static defaultProps = {
-    displayprop: 'show'
+    // displayprop: 'show'
  };
-  
-    handleFormSubmit(e){  
-      e.preventDefault();      
+
+
+  clearNotification(e,props){    
+      this.props.UpdateNotification();   
+  }
+  handleFormSubmit(e){  
+    e.preventDefault();      
       const formData = {};  
       if(this.props.type=="signup")    {
         this.props.SignUpToServer(this.email.value,this.password.value,this.cnfPassword.value);
@@ -34,9 +29,9 @@ class LoginForm extends Component {
         // this.props.dispatch();
       }else{
       this.props.LoginToServer(this.email.value,this.password.value);
-    }
-  
-  }
+    }  
+  }  
+
 
   render() {    
     console.log(this.props);
@@ -56,16 +51,26 @@ class LoginForm extends Component {
     }
     if(this.props.type!='signup'){
     return (    
+      <div className="loginPanel">
       <Col xs={12}  md={4} mdOffset={4}>
-      <div>
-        {this.props.errorMessage}
-      </div>
+        <Alert bsStyle="danger" className={this.props.error  ? '' : 'hide'}>
+            {this.props.errorMessage}      
+        </Alert>      
+        
+      <Panel bsStyle="primary" >
+        <Panel.Heading>
+          <br></br>          
+          <br></br>          
+          <Panel.Title componentClass="h3">Welcome Back!</Panel.Title>          
+        </Panel.Heading>
+        <Panel.Body>
             <form className="" onSubmit={this.handleFormSubmit}>
-              <FormGroup validationState={this.emailStatus}>           
+              <FormGroup validationState={this.props.emailStatus}>           
                 <ControlLabel>UserName/Email</ControlLabel>
-                    <FormControl inputRef={(ref) => {this.email = ref}} type="text"  onChange={this.clearNotification} placeholder="Enter Email/ UserName"/>            
+                    <FormControl inputRef={(ref) => {this.email = ref}} type="text"  onChange={this.clearNotification} placeholder="Enter Email/ UserName"/>                                                    
               </FormGroup>
-              <FormGroup validationState={this.passwordStatus}>           
+
+              <FormGroup validationState={this.props.passwordStatus}>           
                 <ControlLabel>Password</ControlLabel>
                 <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
               </FormGroup>
@@ -79,7 +84,10 @@ class LoginForm extends Component {
                 <Col xs={12}> Do not have an Account? <Link to='/signup'>Create Account!</Link></Col>
               </FormGroup>                             
           </form>
+          </Panel.Body>
+      </Panel>
       </Col>
+      </div>
       
     );
   }else if(this.props.showRoles==true){
@@ -91,9 +99,10 @@ class LoginForm extends Component {
 </Col>);
   }else{
     return(<Col xs={12}  md={4} mdOffset={4}>
-      <div>
-        {this.props.errorMessage}
-      </div>
+      <Alert bsStyle="danger" className={this.props.error  ? '' : 'hide'}>
+            {this.props.errorMessage}      
+      </Alert>      
+
             <form className="" onSubmit={this.handleFormSubmit}>
               <FormGroup>           
                 <ControlLabel>UserName/Email</ControlLabel>
