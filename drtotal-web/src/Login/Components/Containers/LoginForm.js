@@ -53,26 +53,26 @@ class LoginForm extends Component {
     return (    
       <div className="loginPanel">
       <Col xs={12}  md={4} mdOffset={4}>
-        <Alert bsStyle="danger" className={this.props.error  ? '' : 'hide'}>
+        {/* <Alert bsStyle="danger" className={this.props.error  ? '' : 'hide'}>
             {this.props.errorMessage}      
-        </Alert>      
+        </Alert>       */}
         
       <Panel bsStyle="primary" >
-        <Panel.Heading>
-          <br></br>          
-          <br></br>          
-          <Panel.Title componentClass="h3">Welcome Back!</Panel.Title>          
-        </Panel.Heading>
+        
+        
+        
         <Panel.Body>
+            <h4>Sign in!</h4><h5>to contiue on portal</h5>
             <form className="" onSubmit={this.handleFormSubmit}>
               <FormGroup validationState={this.props.emailStatus}>           
                 <ControlLabel>UserName/Email</ControlLabel>
                     <FormControl inputRef={(ref) => {this.email = ref}} type="text"  onChange={this.clearNotification} placeholder="Enter Email/ UserName"/>                                                    
+                    <HelpBlock className={this.props.emailStatus=='error'? '':'hide'}>{this.props.emailStatus=='error' ? this.props.errorMessage : ''} </HelpBlock>
               </FormGroup>
-
               <FormGroup validationState={this.props.passwordStatus}>           
                 <ControlLabel>Password</ControlLabel>
                 <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
+                <HelpBlock className={this.props.passwordStatus=='error'? '':'hide'}>{this.props.passwordStatus=='error'? this.props.errorMessage :''}</HelpBlock>
               </FormGroup>
               <FormGroup>                 
                   <Checkbox>Remember me</Checkbox>                  
