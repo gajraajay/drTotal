@@ -11,3 +11,19 @@ body {
   position: relative;
   top:100px;;
 }
+.p-sm{
+  padding: 20px;
+}
+.pb-sm{
+  padding-bottom: 20px;
+}
+.pb-xl{
+  padding-bottom: 100px;
+}
+
+.m-sm{
+  margin: 20px;
+}
+.p-lg{
+  padding: 50px;
+}

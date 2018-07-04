@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, ProgressBar,FieldGroup,FormControl,Col,Row,FormGroup ,code ,Alert,ControlLabel,HelpBlock,Panel,Checkbox}  from 'react-bootstrap';
+import {Button,Collapse,Fade,Popover, ProgressBar,FieldGroup,FormControl,Col,Row,FormGroup ,code ,Alert,ControlLabel,HelpBlock,Panel,Checkbox}  from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 import { connect } from 'react-redux';
 // import {LoginToServer} from '../../Actions/LoginActions';
@@ -56,13 +56,15 @@ class LoginForm extends Component {
         {/* <Alert bsStyle="danger" className={this.props.error  ? '' : 'hide'}>
             {this.props.errorMessage}      
         </Alert>       */}
-        
-      <Panel bsStyle="primary" >
+
+
+      <Panel className="p-sm pb-xl" bsStyle="primary" >
         
         
         
         <Panel.Body>
-            <h4>Sign in!</h4><h5>to contiue on portal</h5>
+          <img className="pb-sm" src="https://graphicdesignbylisa.com/wp-content/uploads/generic-logo.jpg" width="100" />
+           <div className="pb-sm"><h4>Sign in</h4><h5>to contiue on portal...</h5></div>
             <form className="" onSubmit={this.handleFormSubmit}>
               <FormGroup validationState={this.props.emailStatus}>           
                 <ControlLabel>UserName/Email</ControlLabel>
@@ -74,18 +76,15 @@ class LoginForm extends Component {
                 <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
                 <HelpBlock className={this.props.passwordStatus=='error'? '':'hide'}>{this.props.passwordStatus=='error'? this.props.errorMessage :''}</HelpBlock>
               </FormGroup>
-              <FormGroup>                 
-                  <Checkbox>Remember me</Checkbox>                  
-              </FormGroup>
               <FormGroup>                             
                 <Button  bsStyle="primary" type="submit">Sign in</Button>                
               </FormGroup>            
               <FormGroup>                             
-                <Col xs={12}> Do not have an Account? <Link to='/signup'>Create Account!</Link></Col>
+                <HelpBlock xs={12}> Do not have an Account? <Link to='/signup'>Create Account!</Link></HelpBlock>
               </FormGroup>                             
           </form>
           </Panel.Body>
-      </Panel>
+      </Panel>      
       </Col>
       </div>
       
@@ -103,7 +102,7 @@ class LoginForm extends Component {
             {this.props.errorMessage}      
       </Alert>      
 
-            <form className="" onSubmit={this.handleFormSubmit}>
+            <form  onSubmit={this.handleFormSubmit}>
               <FormGroup>           
                 <ControlLabel>UserName/Email</ControlLabel>
                     <FormControl inputRef={(ref) => {this.email = ref}} type="text" placeholder="Email/ Mobile #"/>            
