@@ -7,7 +7,6 @@ import {LoginToServer,SignUpToServer,UpdateNotification} from '../../Actions/Log
 
 
 const mapStateToProps = (state, ownProps) => {
-  console.log(ownProps);
   return {...state}
 }
 export const LoginPage= connect(mapStateToProps,{LoginToServer,SignUpToServer,UpdateNotification})(LoginForm);

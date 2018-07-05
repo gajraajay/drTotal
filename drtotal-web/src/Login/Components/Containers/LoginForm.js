@@ -8,7 +8,7 @@ class LoginForm extends Component {
 
   constructor(props) {    
     super(props)          
-    console.log(props);
+    
     this.clearNotification=this.clearNotification.bind(this);
     this.handleFormSubmit=this.handleFormSubmit.bind(this);
   }
@@ -25,8 +25,6 @@ class LoginForm extends Component {
       const formData = {};  
       if(this.props.type=="signup")    {
         this.props.SignUpToServer(this.email.value,this.password.value,this.cnfPassword.value);
-
-        // this.props.dispatch();
       }else{
       this.props.LoginToServer(this.email.value,this.password.value);
     }  
@@ -34,34 +32,17 @@ class LoginForm extends Component {
 
 
   render() {    
-    console.log(this.props);
-    console.log("before rndor");
-    
-
-    if(this.props.Login.login==true){
+      if(this.props.Login.login==true){
       if(this.props.data.status==1){
-
-
-        // console.log(this.props.data.roles);
-        // this.props={...this.props,showRoles:true}
-        // console.log(this.props);
       }
     }else{
-      console.log("not login");
+      
     }
     if(this.props.type!='signup'){
     return (    
       <div className="loginPanel">
       <Col xs={12}  md={4} mdOffset={4}>
-        {/* <Alert bsStyle="danger" className={this.props.error  ? '' : 'hide'}>
-            {this.props.errorMessage}      
-        </Alert>       */}
-
-
-      <Panel className="p-sm pb-xl" bsStyle="primary" >
-        
-        
-        
+      <Panel className="p-sm pb-xl" bsStyle="primary">
         <Panel.Body>
           <img className="pb-sm" src="https://graphicdesignbylisa.com/wp-content/uploads/generic-logo.jpg" width="100" />
            <div className="pb-sm"><h4>Sign in</h4><h5>to contiue on portal...</h5></div>

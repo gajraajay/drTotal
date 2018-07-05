@@ -5,7 +5,8 @@ import {
 import axios from 'axios';
 import cookie from 'react-cookies'
 import { STATUS_CODES } from "http";
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
+console.log(axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded');
+console.log(axios.defaults.headers.post['token'] = localStorage.getItem('auth_key'));
 
 
 
@@ -109,18 +110,18 @@ export function SignUpToServer(email,password,confirmPassword){
         
         payload.error=true;
         if(email.trim()==''){
-            console.log("here 1");
+            
             payload.errorMessage='email needed';
         }
         else if(password.trim()==''){
-            console.log("here 2");
+            
             payload.errorMessage='password needed';
         }
         else if(confirmPassword.trim()==''){
-            console.log("here 3");
+            
             payload.errorMessage='Confirm Password needed';
         }else{
-            console.log("here 4");
+            
             payload.errorMessage='All field neded';
         }
         
@@ -140,24 +141,16 @@ export function LoginToServer(email, password) {
     var error = '';
     if (email && password) {
         return (dispatch) => {
-            console.log(JSON.stringify({
-                email: email,
-                password: password
-            }));
-         
             const params = new URLSearchParams();
             params.append('email', email);
             params.append('password', password);
-            
-
             axios.post(
                     'http://localhost:7071/api/v1/validate-user', params, { withCredentials: true })
                 .then(res => {                    
                     switch (res.status) {
 
                         case 200:
-                        if(res.data.status==1){
-                        
+                        if(res.data.status==1){                        
                             dispatch({
                                 type: LOGIN_SUCCESS,
                                 'payload': {
@@ -166,6 +159,7 @@ export function LoginToServer(email, password) {
                                     data: res.data
                                 }
                             });
+                            
                             break;
                         }else{
                              error = 'Hey, we can\'t find your account';
