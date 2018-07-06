@@ -13,20 +13,19 @@ var UserSession = require('./../models/UserSession.js');
 var roles = require('./../models/roles.js');
 
 const Op = Sequelize.Op;
-var addHeader=function(req,res,next){
-    console.log("we are here");
+var addHeader=function(req,res,next){   
     try{
-        res.setHeader('Access-Control-Allow-Origin', req.headers.origin);     
+        res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     }catch(e){
-        res.setHeader('Access-Control-Allow-Origin', req.headers.host);     
-            console.log(e);
+        res.setHeader('Access-Control-Allow-Origin', req.headers.host);    
     }
+   
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');     
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type','*');     
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization,Token");    
+    res.header('Access-Control-Allow-Credentials', true);
     
-
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');     
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type','withCredentials');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    
+    console.log(req);
     next();
 }
 app.use(addHeader);
@@ -63,7 +62,7 @@ app.post("/validate-user", function(req, res) {
                             })
                                 .then(usersMeta => {                                    
                                     if (usersMeta.length > 0) {
-                                        res.send({status: 1, auth_token: usersMeta[0].authToken});
+                                        res.send({status: 1, auth_token: usersMeta[0].cookieKey});
                                     } else {
                                         date = new Date();
                                         authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
@@ -82,7 +81,7 @@ app.post("/validate-user", function(req, res) {
                                                     domain:req.headers.origin
                                                 });
                                                 console.log(req.ip);
-                                                res.send({status: 1, auth_token: authToken});
+                                                res.send({status: 1, auth_token: cookieKey});
                                             }, function(err) {
                                                 res.send({status: 0, error: err});
                                             });
@@ -109,14 +108,12 @@ app.post("/validate-user", function(req, res) {
                                         httpOnly: false,                     
                                         domain:req.headers.origin                   
                                     });
-                                    res.send({status: 1, auth_token: authToken});
+                                    res.send({status: 1, auth_token: cookieKey});
                                 }, function(err) {
                                     console.log(err);
                                     res.send({status: 0});
                                 });
                         }
-
-                        //TODO store the key to database and use for future authentication guve it a validity.
                     } else {
                         res.statusCode = 401;
                         res.send({"status": 0});
@@ -191,22 +188,6 @@ app.post("/create-user", function(req, res) {
                 res.statusCode = 409;
                 res.send({"status": 0});
             });
-
-        //  con.query("INSERT INTO users (email,password,user_id,contact,reg_time) values('" + req.body.email + "','" + password + "','" + user_id + "','" + JSON.stringify(contact) + "','" + date.getTime() / 1000 + "')", function(err, states) {
-        //     if (err) {
-        //         if (err.code == "ER_DUP_ENTRY") {
-        //             res.statusCode = 409;
-        //             res.send({"status": 0});
-        //         }
-        //     }
-        //     if (states) {
-        //         res.send({"status": 1});
-        //         UserMeta.create({firstName: 'John', lastName: 'Hancock'});
-        //
-        //     }
-        //
-        // });
-
     } else {
         res.statusCode = 400;
         res.send({"status": 0});

@@ -6,7 +6,7 @@ import axios from 'axios';
 import cookie from 'react-cookies'
 import { STATUS_CODES } from "http";
 console.log(axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded');
-console.log(axios.defaults.headers.post['token'] = localStorage.getItem('auth_key'));
+console.log(axios.defaults.headers.post['Token'] = localStorage.getItem('dt_auth_key'));
 
 
 

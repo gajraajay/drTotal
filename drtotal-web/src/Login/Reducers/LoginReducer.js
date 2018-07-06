@@ -1,7 +1,7 @@
 import {
     LOGIN_FAIL,LOGIN_SUCCESS
 } from "../Actions/types";
-
+import  cookie  from 'react-cookies';
 const initialState = {};
 const LoginReducer = (state = initialState, action) => {    
     
@@ -11,7 +11,8 @@ const LoginReducer = (state = initialState, action) => {
             {              
                 
                 localStorage.setItem('login',JSON.stringify({...action.payload}));
-                localStorage.setItem('auth_key',action.payload.data.auth_token);
+                localStorage.setItem('dt_auth_key',action.payload.data.auth_token);
+                cookie.save('dt_auth_key',action.payload.data.auth_token , { path: '/' })
                 return { ... action.payload
                 }
 
