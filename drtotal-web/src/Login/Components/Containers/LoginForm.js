@@ -24,6 +24,7 @@ class LoginForm extends Component {
     e.preventDefault();      
       const formData = {};  
       if(this.props.type=="signup")    {
+        
         this.props.SignUpToServer(this.email.value,this.password.value,this.cnfPassword.value);
       }else{
       this.props.LoginToServer(this.email.value,this.password.value);
@@ -78,29 +79,37 @@ class LoginForm extends Component {
 })}
 </Col>);
   }else{
-    return(<Col xs={12}  md={4} mdOffset={4}>
-      <Alert bsStyle="danger" className={this.props.error  ? '' : 'hide'}>
-            {this.props.errorMessage}      
-      </Alert>      
-
+    return(
+      <div className="loginPanel">
+      <Col xs={12}  md={4} mdOffset={4}>
+      <Panel className="p-sm pb-xl" bsStyle="primary">
+        <Panel.Body>                
+        <img className="pb-sm" src="https://graphicdesignbylisa.com/wp-content/uploads/generic-logo.jpg" width="100" />
+           <div className="pb-sm"><h4></h4><h5>one place solution for your healthcare...</h5></div>
             <form  onSubmit={this.handleFormSubmit}>
-              <FormGroup>           
-                <ControlLabel>UserName/Email</ControlLabel>
-                    <FormControl inputRef={(ref) => {this.email = ref}} type="text" placeholder="Email/ Mobile #"/>            
+            <FormGroup validationState={this.props.emailStatus}>                   
+                <ControlLabel>UserName/Email</ControlLabel>                    
+                    <FormControl inputRef={(ref) => {this.email = ref}} type="text"  onChange={this.clearNotification} placeholder="Enter Email/ UserName"/>                                                    
+                    <HelpBlock className={this.props.emailStatus=='error'? '':'hide'}>{this.props.emailStatus=='error' ? this.props.errorMessage : ''} </HelpBlock>
               </FormGroup>
-              <FormGroup>           
-                <ControlLabel>Password</ControlLabel>
-                <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Password"/>                                                 
+              <FormGroup validationState={this.props.passwordStatus}>           
+                <ControlLabel>Password</ControlLabel>                
+                <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
+                <HelpBlock className={this.props.passwordStatus=='error'? '':'hide'}>{this.props.passwordStatus=='error'? this.props.errorMessage :''}</HelpBlock>
               </FormGroup>
-              <FormGroup>           
-                <ControlLabel>Password</ControlLabel>
-                <FormControl inputRef={(ref)=>{this.cnfPassword=ref}} className="formControll"   type="password" placeholder=" Retype password"/>                                                 
+              <FormGroup validationState={this.props.confirmPasswordStatus}>           
+                <ControlLabel>Password</ControlLabel>                
+                <FormControl inputRef={(ref)=>{this.cnfPassword=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
+                <HelpBlock className={this.props.confirmPasswordStatus=='error'? '':'hide'}>{this.props.confirmPasswordStatus=='error'? this.props.errorMessage :''}</HelpBlock>
               </FormGroup>
               <FormGroup>                             
                 <Button  bsStyle="primary" type="submit">Enroll me</Button>                
               </FormGroup> 
           </form>
-      </Col>);
+          </Panel.Body>
+          </Panel>
+        
+      </Col></div>);
   }
   }
 }

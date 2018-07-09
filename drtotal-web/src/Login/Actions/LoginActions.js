@@ -20,11 +20,22 @@ export function UpdateNotification(state){
     } 
 }
 export function SignUpToServer(email,password,confirmPassword){
+    var error=false;
     var payload={
         login: false,
         data: '',
         error: false,
         errorMessage: 'error'
+    }
+        payload={
+        stage:'signup',
+        login: false,
+        data: '',
+        error:false,
+        errorMessage: error,
+        emailStatus:'',
+        passwordStatus:'',
+        confirmPasswordStatus:''
     }
     
     if(email && password && confirmPassword){        
@@ -35,6 +46,8 @@ export function SignUpToServer(email,password,confirmPassword){
             error:true,
             errorMessage:'not matching'
         }
+        payload.passwordStatus='error';
+        payload.confirmPasswordStatus='error';
         return(dispatch)=>{
             dispatch({
                 type: LOGIN_FAIL,
@@ -50,8 +63,7 @@ export function SignUpToServer(email,password,confirmPassword){
             .then(res => {                    
                 console.log(res.data.status);
                 switch (res.status) {
-                    case 200:
-                    console.log(res.data.status);
+                    case 200:                    
                     if(res.data.status==1){
                         
                         dispatch({
@@ -65,18 +77,18 @@ export function SignUpToServer(email,password,confirmPassword){
                         });
                         break;
                     }else{
-                        dispatch({
-                            type: LOGIN_FAIL,
-                            'payload': {
-                                stage:'signup',
-                                login: false,
-                                error: true,
-                                errorMessage:'something went wrong',
-                                data: res.data
-                            }
-                        });
-                        break;
-                    }
+                        error = 'Hey, we can\'t find your account';
+                       dispatch({
+                           type: LOGIN_FAIL,
+                           'payload': {
+                               stage:'login',
+                               login: false,
+                               error:true,
+                               errorMessage: error
+                           }
+                       });
+                       break;
+                   }
                    
                         
                     case 409:
@@ -109,20 +121,25 @@ export function SignUpToServer(email,password,confirmPassword){
     }else{
         
         payload.error=true;
-        if(email.trim()==''){
-            
+        if(email.trim()==''){            
             payload.errorMessage='email needed';
+            payload.emailStatus='error';
         }
         else if(password.trim()==''){
             
             payload.errorMessage='password needed';
+            payload.passwordStatus='error';
         }
         else if(confirmPassword.trim()==''){
             
             payload.errorMessage='Confirm Password needed';
+            payload.confirmPasswordStatus='error';
         }else{
             
             payload.errorMessage='All field neded';
+            payload.emailStatus='error';
+            payload.passwordStatus='error';
+            payload.confirmPasswordStatus='error';
         }
         
         
