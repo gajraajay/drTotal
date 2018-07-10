@@ -25,13 +25,13 @@ var addHeader=function(req,res,next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization,Token");    
     res.header('Access-Control-Allow-Credentials', true);
     
-    console.log(req);
+    console.log(req);    
     next();
 }
 app.use(addHeader);
 
-app.get("/demo", function(req, res) {     
-       
+app.get("/demo", function(req, res,data) {     
+    
     res.cookie('dt_auth_key', 'helloworld', {
         maxAge: 900000,
         httpOnly: false,

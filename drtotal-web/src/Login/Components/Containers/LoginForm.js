@@ -94,17 +94,20 @@ class LoginForm extends Component {
               </FormGroup>
               <FormGroup validationState={this.props.passwordStatus}>           
                 <ControlLabel>Password</ControlLabel>                
-                <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
+                <FormControl inputRef={(ref)=>{this.password=ref}} className="formControll" onChange={this.clearNotification}   type="password" placeholder="Enter password"/>                                                 
                 <HelpBlock className={this.props.passwordStatus=='error'? '':'hide'}>{this.props.passwordStatus=='error'? this.props.errorMessage :''}</HelpBlock>
               </FormGroup>
               <FormGroup validationState={this.props.confirmPasswordStatus}>           
                 <ControlLabel>Password</ControlLabel>                
-                <FormControl inputRef={(ref)=>{this.cnfPassword=ref}} className="formControll"   type="password" placeholder="Enter password"/>                                                 
+                <FormControl inputRef={(ref)=>{this.cnfPassword=ref}} className="formControll"  onChange={this.clearNotification}  type="password" placeholder="Enter password"/>                                                 
                 <HelpBlock className={this.props.confirmPasswordStatus=='error'? '':'hide'}>{this.props.confirmPasswordStatus=='error'? this.props.errorMessage :''}</HelpBlock>
               </FormGroup>
               <FormGroup>                             
                 <Button  bsStyle="primary" type="submit">Enroll me</Button>                
               </FormGroup> 
+              <FormGroup>                             
+                <HelpBlock xs={12}> Already have an account ? <Link to='/login'>LogIn</Link></HelpBlock>
+              </FormGroup>                             
           </form>
           </Panel.Body>
           </Panel>

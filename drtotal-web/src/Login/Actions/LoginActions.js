@@ -14,7 +14,7 @@ export function UpdateNotification(state){
     return(dispatch)=>{
         dispatch({
             type:'default',
-            payload:{emailStatus:null,passwordStatus:null,error:false
+            payload:{emailStatus:null,passwordStatus:null,error:false,confirmPasswordStatus:null
             }
         })
     } 
@@ -33,9 +33,9 @@ export function SignUpToServer(email,password,confirmPassword){
         data: '',
         error:false,
         errorMessage: error,
-        emailStatus:'',
-        passwordStatus:'',
-        confirmPasswordStatus:''
+        emailStatus:null,
+        passwordStatus:null,
+        confirmPasswordStatus:null
     }
     
     if(email && password && confirmPassword){        
@@ -107,9 +107,12 @@ export function SignUpToServer(email,password,confirmPassword){
                         break;
                 }
 
-            },(error)=>{               
+            },(error)=>{           
+                console.log("ops")    
                 payload.error=true;
-                payload.errorMessage='something went wrong' ;
+                payload.errorMessage='Email already in use' ;                
+                payload.emailStatus='error' ;
+                
                 dispatch({
                     type: LOGIN_FAIL,
                     'payload': payload,                    
@@ -219,6 +222,8 @@ export function LoginToServer(email, password) {
                             break;
                     }
 
+                },(err)=>{
+                    console.log(err);
                 });
 
 
