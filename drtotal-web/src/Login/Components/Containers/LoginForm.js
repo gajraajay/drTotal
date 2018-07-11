@@ -2,21 +2,33 @@ import React, {Component} from 'react';
 import {Button,Collapse,Fade,Popover, ProgressBar,FieldGroup,FormControl,Col,Row,FormGroup ,code ,Alert,ControlLabel,HelpBlock,Panel,Checkbox}  from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 import { connect } from 'react-redux';
+import {Redirect} from 'react-router-dom';
 // import {LoginToServer} from '../../Actions/LoginActions';
 
 class LoginForm extends Component {
 
   constructor(props) {    
-    super(props)          
-    
+    super(props)    
+    console.log("constru");
     this.clearNotification=this.clearNotification.bind(this);
     this.handleFormSubmit=this.handleFormSubmit.bind(this);
   }
-  static defaultProps = {
-    // displayprop: 'show'
+  static defaultProps = {    
  };
-
-
+ componentDidMount(){
+   console.log("componentDidMount");
+ }
+ shouldComponentUpdate(nextProps,nextState){
+   console.log("shouldComponentUpdate()");
+   console.log(nextProps,nextState);
+   return true;
+ }
+ componentDidUpdate(prevProps,prevState,snapShot){
+   console.log(prevProps);
+   console.log(prevState);
+   console.log(snapShot);
+   console.log("didupdate");
+ }
   clearNotification(e,props){    
       this.props.UpdateNotification();   
   }
@@ -35,6 +47,7 @@ class LoginForm extends Component {
   render() {    
       if(this.props.Login.login==true){
       if(this.props.data.status==1){
+        return <Redirect to='/'  />
       }
     }else{
       

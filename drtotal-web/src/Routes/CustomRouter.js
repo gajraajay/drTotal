@@ -1,16 +1,24 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Link} from "react-router-dom";
+
 // import LoginForm from '../Login/Components/LoginForm';
 import { LoginPage } from '../Login/Components/Containers/LoginContainer';
 import {Navbar, NavItem,NavDropdown,MenuItem,Nav,Row,FormGroup ,code ,ControlLabel,HelpBlock,Panel,Checkbox}  from 'react-bootstrap';
+import {store,pReducer} from '../Store';
+import Redirect from 'react-router-dom/Redirect';
 
 export const CustomRouter=()=> <Router>
 <div>
   
 
-  <Route exact path="/" component={() => (    
-    <h1>Cool</h1>
-  )}/>
+  <Route exact path="/" component={() => {
+    if(store.getState().Login.login){
+      return (<h1>Cool</h1>);
+    }else{
+      return(<Redirect to='/login'  />)
+    }
+  }}
+  />
   <Route path="/login" component={() => (    
       <LoginPage errorCode='this is something fishi' type='login'>    
       </LoginPage>
@@ -18,10 +26,12 @@ export const CustomRouter=()=> <Router>
     
     
   )}/>
-  <Route path="/signup" component={() => (
+  <Route path="/signup" component={() => {
+    
+    return(
     <LoginPage errorCode='this is something fishi' type='signup'>        
     </LoginPage>   
-  )}/>
+  )}}/>
 </div>
 </Router>
 
