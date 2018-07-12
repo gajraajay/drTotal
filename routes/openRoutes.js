@@ -1,5 +1,5 @@
 var express = require("express");
-var bodyParser = require('body-parser');sa 
+var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var md5 = require('md5');
 var app = express();
@@ -38,8 +38,8 @@ app.post("/validate-user", function(req, res) {
                             }).then(usersMeta => {
                                     if (usersMeta.length > 0) {
                                         if(users[0].user_id==usersMeta[0].userId){                                            
-                                        }                                        
-                                        res.send({status: 1, auth_token: usersMeta[0].cookieKey});
+                                        }
+                                        res.send({status: 1, auth_token: usersMeta[0].cookieKey,jwt:jwt.create('dummy-screte',{c_session:usersMeta[0].cookieKey}).token});
                                     } else {
                                         date = new Date();
                                         authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
@@ -51,8 +51,8 @@ app.post("/validate-user", function(req, res) {
                                             inTime: date.getTime() / 1000,
                                             timeout: (date.getTime() / 1000) + (1000)
                                             })
-                                            .then(function(meta) {                                                
-                                                res.send({status: 1, auth_token: cookieKey});
+                                            .then(function(meta) {     
+                                                res.send({status: 1, auth_token: cookieKey,jwt:jwt.create('dummy-screte',{c_session:cookieKey}).token});                                                
                                             }, function(err) {
                                                 res.send({status: 0, error: err});
                                             });
