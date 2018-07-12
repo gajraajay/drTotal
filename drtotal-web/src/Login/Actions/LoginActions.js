@@ -168,7 +168,6 @@ export function LoginToServer(email, password) {
                     'http://localhost:7071/api/v1/validate-user', params, { withCredentials: true })
                 .then(res => {                    
                     switch (res.status) {
-
                         case 200:
                         if(res.data.status==1){                        
                             dispatch({

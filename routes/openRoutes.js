@@ -1,5 +1,5 @@
 var express = require("express");
-var bodyParser = require('body-parser');
+var bodyParser = require('body-parser');sa 
 var cookieParser = require('cookie-parser');
 var md5 = require('md5');
 var app = express();
@@ -11,36 +11,13 @@ var Sequelize = require('sequelize');
 var User = require('./../models/user.js');
 var UserSession = require('./../models/UserSession.js');
 var roles = require('./../models/roles.js');
-
+var jwt=require('jwt-express');
 const Op = Sequelize.Op;
-var addHeader=function(req,res,next){   
-    try{
-        res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
-    }catch(e){
-        res.setHeader('Access-Control-Allow-Origin', req.headers.host);    
-    }
-   
-    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');     
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type','*');     
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization,Token");    
-    res.header('Access-Control-Allow-Credentials', true);
-    
-    console.log(req);    
-    next();
-}
-app.use(addHeader);
 
-app.get("/demo", function(req, res,data) {     
-    
-    res.cookie('dt_auth_key', 'helloworld', {
-        maxAge: 900000,
-        httpOnly: false,
-        domain:'localhost'
-    })
-        res.send("hello world");
+app.get("/demo", function(req, res,data) {        
+    res.send(jwt.create('cool',{name:'something',token:'hey-something'}));        
 });
-app.post("/validate-user", function(req, res) {    
-    
+app.post("/validate-user", function(req, res) {
     if (req.body.email && req.body.password) {
         User
             .findAll({
@@ -51,17 +28,17 @@ app.post("/validate-user", function(req, res) {
             .all()
             .then(users => {
                 if (users.length == 1) {
-                    if (users[0].password === md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email))) {
-                        console.log(req.cookies.dt_auth_key);
-                        if (req.cookies.dt_auth_key) {
+                    if (users[0].password === md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email))) {                        
+                        if (req.get('Token')) {
                             UserSession
                                 .findAll({
                                 where: {
-                                    cookieKey: req.cookies.dt_auth_key
+                                    cookieKey: req.get('Token')
                                 }
-                            })
-                                .then(usersMeta => {                                    
+                            }).then(usersMeta => {
                                     if (usersMeta.length > 0) {
+                                        if(users[0].user_id==usersMeta[0].userId){                                            
+                                        }                                        
                                         res.send({status: 1, auth_token: usersMeta[0].cookieKey});
                                     } else {
                                         date = new Date();
@@ -72,15 +49,9 @@ app.post("/validate-user", function(req, res) {
                                             cookieKey: cookieKey,
                                             userId: users[0].user_id,
                                             inTime: date.getTime() / 1000,
-                                            timeout: (date.getTime() / 1000) + (12 * 24 * 3600)
+                                            timeout: (date.getTime() / 1000) + (1000)
                                             })
-                                            .then(function(meta) {
-                                                res.cookie('dt_auth_key', cookieKey, {
-                                                    maxAge: 900000,
-                                                    httpOnly: false,
-                                                    domain:req.headers.origin
-                                                });
-                                                console.log(req.ip);
+                                            .then(function(meta) {                                                
                                                 res.send({status: 1, auth_token: cookieKey});
                                             }, function(err) {
                                                 res.send({status: 0, error: err});
@@ -91,8 +62,7 @@ app.post("/validate-user", function(req, res) {
                                     console.log(err);
                                 });
                         } else {
-                            date = new Date();
-                            console.log(date.getTime());
+                            date = new Date();                            
                             authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
                             cookieKey = md5(authToken + md5(date.getTime()));
                             UserSession.create({
@@ -100,14 +70,9 @@ app.post("/validate-user", function(req, res) {
                                 cookieKey: cookieKey,
                                 userId: users[0].user_id,
                                 inTime: date.getTime() / 1000,
-                                timeout: (date.getTime() / 1000) + (12 * 24 * 3600)
+                                timeout: (date.getTime() / 1000) + (1000)
                                 })
-                                .then(function(meta) {
-                                    res.cookie('dt_auth_key', cookieKey, {
-                                        maxAge: 900000,
-                                        httpOnly: false,                     
-                                        domain:req.headers.origin                   
-                                    });
+                                .then(function(meta) {                                    
                                     res.send({status: 1, auth_token: cookieKey});
                                 }, function(err) {
                                     console.log(err);
@@ -159,14 +124,9 @@ app.post("/create-user", function(req, res) {
                     cookieKey: cookieKey,
                     userId: user_id,
                     inTime: date.getTime() / 1000,
-                    timeout: (date.getTime() / 1000) + (12 * 24 * 3600)
+                    timeout: (date.getTime() / 1000) + (1000)
                     })
-                    .then(function(meta) {
-                        console.log(meta);
-                        res.cookie('dt_auth_key', cookieKey, {
-                            maxAge: 900000,
-                            httpOnly: false
-                        });
+                    .then(function(meta) {                      
                         roles
                             .findAll({where:{
                                 roleId:{

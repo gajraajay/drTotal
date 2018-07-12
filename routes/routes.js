@@ -16,25 +16,9 @@ var UserSession = require('./../models/UserSession.js');
 var userRole = require('./../models/user_roles.js');
 
 var isValidate=require('./../middlewares/validate_user.js');
-// var isValidate = function(req, res, next) {
-//     if (req.cookies.dt_auth_key)
-//         UserSession.findAll({
-//             where: {
-//                 cookieKey: req.cookies.dt_auth_key
-//             }
-//         }).then(function(session) {
-//             req.userid = session[0].userId;
-//             next();
-//         }, function(err) {
-//             res.statusCode = 400;
-//             res.send({"err": err});
-//         });
-//     else {
-//         res.statusCode = 401;
-//         res.send({"status": 0});
-//     }
-//
-// };
+var jwt=require('jwt-express');
+app.use(jwt.init('secret',{cookies: false}));
+
 
 app.use("/user/", isValidate);
 app.get('/user/', function(req, res) {

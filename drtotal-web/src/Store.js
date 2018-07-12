@@ -15,7 +15,7 @@ const persistConfig = {
     storage: storage
    };
 
-const initialState = {};
+const initialState = { };
 const middleWares = [thunk]; 
 
 const pReducer = persistReducer(persistConfig, RootReducer);

@@ -7,8 +7,37 @@ const User = require('./models/user.js');
 const UserMeta = require('./models/UserSession.js');
 const user_role = require('./models/user_roles.js');
 const role = require('./models/roles.js');
-
-
+var UserSession = require('./models/UserSession.js');
+var Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+var time=0;
+(function timerTask(){
+    let currentTime=new Date().getTime()/1000;    
+        UserSession.destroy({
+            where :{
+                timeout : {
+                    [Op.lte]:currentTime
+                }
+            }
+        });    
+    time=currentTime;
+    setTimeout(timerTask,5000,'happy');
+})();
+let addHeader=function(req,res,next){   
+    console.log(req.get('Token'));
+    try{
+        res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
+    }catch(e){
+        res.setHeader('Access-Control-Allow-Origin', req.headers.host);    
+    }
+   
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');     
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type','*');     
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization,Token");    
+    res.header('Access-Control-Allow-Credentials', true);   
+    next();
+}
+app.use(addHeader);
 
 routes.use('/api/v1/', require('./routes/openRoutes.js'));
 
