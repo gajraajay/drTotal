@@ -72,7 +72,8 @@ export function SignUpToServer(email,password,confirmPassword){
                                 stage:'signup',
                                 error:false,
                                 login: true,
-                                data: res.data
+                                data: res.data,
+                                showRoles:true
                             }
                         });
                         break;
