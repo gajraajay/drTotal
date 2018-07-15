@@ -1,7 +1,7 @@
 import {
     createStore,
     applyMiddleware
-} from "../../../.cache/typescript/2.9/node_modules/redux";
+} from "redux";
 import RootReducer from './Reducers/RootReducer';
 import {
     composeWithDevTools

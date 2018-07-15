@@ -15,18 +15,24 @@ import {
   Panel,
   Popover,
   ProgressBar,
-  Row
+  Row,
+  Radio
 } from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
+import {NavBar} from '../../../NAV/NavBar';
 
 class LoginForm extends Component {
   constructor(props) {
     super(props)
     console.log("constru");
-    this.clearNotification = this.clearNotification.bind(this);
-    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.clearNotification = this
+      .clearNotification
+      .bind(this);
+    this.handleFormSubmit = this
+      .handleFormSubmit
+      .bind(this);
   }
 
   static defaultProps = {};
@@ -40,27 +46,31 @@ class LoginForm extends Component {
     console.log("didupdate");
   }
   clearNotification(e, props) {
-    this.props.UpdateNotification();
+    this
+      .props
+      .UpdateNotification();
   }
 
   handleFormSubmit(e) {
     e.preventDefault();
     const formData = {};
     if (this.props.type == "signup") {
-      this.props.SignUpToServer(this.email.value, this.password.value, this.cnfPassword.value);
+      this
+        .props
+        .SignUpToServer(this.email.value, this.password.value, this.cnfPassword.value);
     } else {
-      this.props.LoginToServer(this.email.value, this.password.value);
+      this
+        .props
+        .LoginToServer(this.email.value, this.password.value);
     }
   }
 
   render() {
     if (this.props.Login.login == true) {
       if (this.props.data.status == 1 && !this.props.showRoles) {
-        return <Redirect to='/' />
+        return <Redirect to='/'/>
       }
-    } else {      
-
-    }
+    } else {}
     if (this.props.type != 'signup') {
       return (
         <div className="loginPanel">
@@ -70,7 +80,7 @@ class LoginForm extends Component {
                 <img
                   className="pb-sm"
                   src="https://graphicdesignbylisa.com/wp-content/uploads/generic-logo.jpg"
-                  width="100" />
+                  width="100"/>
                 <div className="pb-sm">
                   <h4>Sign in</h4>
                   <h5>to contiue on portal...</h5>
@@ -84,8 +94,13 @@ class LoginForm extends Component {
                     }}
                       type="text"
                       onChange={this.clearNotification}
-                      placeholder="Enter Email/ UserName" />
-                    <HelpBlock className={this.props.emailStatus == 'error' ? '' : 'hide'}>{this.props.emailStatus == 'error' ? this.props.errorMessage : ''}
+                      placeholder="Enter Email/ UserName"/>
+                    <HelpBlock
+                      className={this.props.emailStatus == 'error'
+                      ? ''
+                      : 'hide'}>{this.props.emailStatus == 'error'
+                        ? this.props.errorMessage
+                        : ''}
                     </HelpBlock>
                   </FormGroup>
                   <FormGroup validationState={this.props.passwordStatus}>
@@ -96,8 +111,13 @@ class LoginForm extends Component {
                     }}
                       className="formControll"
                       type="password"
-                      placeholder="Enter password" />
-                    <HelpBlock className={this.props.passwordStatus == 'error' ? '' : 'hide'}>{this.props.passwordStatus == 'error' ? this.props.errorMessage : ''}</HelpBlock>
+                      placeholder="Enter password"/>
+                    <HelpBlock
+                      className={this.props.passwordStatus == 'error'
+                      ? ''
+                      : 'hide'}>{this.props.passwordStatus == 'error'
+                        ? this.props.errorMessage
+                        : ''}</HelpBlock>
                   </FormGroup>
                   <FormGroup>
                     <Button bsStyle="primary" type="submit">Sign in</Button>
@@ -116,14 +136,41 @@ class LoginForm extends Component {
 
       );
     } else if (this.props.showRoles == true) {
-      return (
-        <Col xs={12} md={4} mdOffset={4}>SELECT PROPER OPTION{this.props.data.roles.map(function (object, i) {
 
-            return <div>
-              <a href="#">{JSON.stringify(object.roleName)}</a>
-            </div>
-          })}
-        </Col>
+      return (
+        <div>
+          <NavBar/>
+          <Col xs={12} md={4} mdOffset={4}>
+            <Panel>
+              <Panel.Heading>
+                Tell us who are you...?
+              </Panel.Heading>
+              <Panel.Body>
+{this.props.data.user_id}
+                <FormGroup>
+                  {this
+                    .props
+                    .data
+                    .roles
+                    .map(function (object, i) {
+                      return <div>
+                        <Radio name="radioGroup">
+                          {object.roleName}
+                        </Radio>
+
+                      </div>
+
+                    })}
+                </FormGroup>
+                <FormGroup>
+                  <Col smOffset={8} sm={2}>
+                    <Button type="submit" bsStyle="primary">Sign in</Button>
+                  </Col>
+                </FormGroup>
+              </Panel.Body>
+            </Panel>
+          </Col>
+        </div>
       );
     } else {
       return (
@@ -134,7 +181,7 @@ class LoginForm extends Component {
                 <img
                   className="pb-sm"
                   src="https://graphicdesignbylisa.com/wp-content/uploads/generic-logo.jpg"
-                  width="100" />
+                  width="100"/>
                 <div className="pb-sm">
                   <h4></h4>
                   <h5>one place solution for your healthcare...</h5>
@@ -148,8 +195,13 @@ class LoginForm extends Component {
                     }}
                       type="text"
                       onChange={this.clearNotification}
-                      placeholder="Enter Email/ UserName" />
-                    <HelpBlock className={this.props.emailStatus == 'error' ? '' : 'hide'}>{this.props.emailStatus == 'error' ? this.props.errorMessage : ''}
+                      placeholder="Enter Email/ UserName"/>
+                    <HelpBlock
+                      className={this.props.emailStatus == 'error'
+                      ? ''
+                      : 'hide'}>{this.props.emailStatus == 'error'
+                        ? this.props.errorMessage
+                        : ''}
                     </HelpBlock>
                   </FormGroup>
                   <FormGroup validationState={this.props.passwordStatus}>
@@ -161,8 +213,13 @@ class LoginForm extends Component {
                       className="formControll"
                       onChange={this.clearNotification}
                       type="password"
-                      placeholder="Enter password" />
-                    <HelpBlock className={this.props.passwordStatus == 'error' ? '' : 'hide'}>{this.props.passwordStatus == 'error' ? this.props.errorMessage : ''}</HelpBlock>
+                      placeholder="Enter password"/>
+                    <HelpBlock
+                      className={this.props.passwordStatus == 'error'
+                      ? ''
+                      : 'hide'}>{this.props.passwordStatus == 'error'
+                        ? this.props.errorMessage
+                        : ''}</HelpBlock>
                   </FormGroup>
                   <FormGroup validationState={this.props.confirmPasswordStatus}>
                     <ControlLabel>Password</ControlLabel>
@@ -173,8 +230,13 @@ class LoginForm extends Component {
                       className="formControll"
                       onChange={this.clearNotification}
                       type="password"
-                      placeholder="Enter password" />
-                    <HelpBlock className={this.props.confirmPasswordStatus == 'error' ? '' : 'hide'}>{this.props.confirmPasswordStatus == 'error' ? this.props.errorMessage : ''}</HelpBlock>
+                      placeholder="Enter password"/>
+                    <HelpBlock
+                      className={this.props.confirmPasswordStatus == 'error'
+                      ? ''
+                      : 'hide'}>{this.props.confirmPasswordStatus == 'error'
+                        ? this.props.errorMessage
+                        : ''}</HelpBlock>
                   </FormGroup>
                   <FormGroup>
                     <Button bsStyle="primary" type="submit">Enroll me</Button>

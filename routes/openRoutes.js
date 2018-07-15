@@ -14,6 +14,7 @@ var roles = require('./../models/roles.js');
 var jwt=require('jwt-express');
 const Op = Sequelize.Op;
 
+
 app.get("/demo", function(req, res,data) {        
     res.send(jwt.create('cool',{name:'something',token:'hey-something'}));        
 });
@@ -52,9 +53,9 @@ app.post("/validate-user", function(req, res) {
                                             timeout: (date.getTime() / 1000) + (1000)
                                             })
                                             .then(function(meta) {     
-                                                res.send({status: 1, auth_token: cookieKey,jwt:jwt.create('dummy-screte',{c_session:cookieKey}).token});                                                
+                                                res.send({status: 1,user_id:req.body.email,auth_token: cookieKey,jwt:jwt.create('dummy-screte',{c_session:cookieKey}).token});                                                
                                             }, function(err) {
-                                                res.send({status: 0, error: err});
+                                                res.send({status: 0,user_id:req.body.email, error: err});
                                             });
                                     }
 
@@ -73,34 +74,39 @@ app.post("/validate-user", function(req, res) {
                                 timeout: (date.getTime() / 1000) + (1000)
                                 })
                                 .then(function(meta) {                                    
-                                    res.send({status: 1, auth_token: cookieKey});
+                                    res.send({status: 1,user_id:req.body.email, auth_token: cookieKey});
                                 }, function(err) {
                                     console.log(err);
-                                    res.send({status: 0});
+                                    res.send({status: 0,user_id:req.body.email});
                                 });
                         }
                     } else {
                         res.statusCode = 401;
-                        res.send({"status": 0});
+                        res.send({"status": 0,user_id:req.body.email});
                     }
                 } else {
-                    res.send({"status": 0});
+                    res.send({"status": 0,user_id:req.body.email});
                 }
             }, err => {
                 console.log(err);
                 res.statusCode = 409;
-                res.send({"status": 0});
+                res.send({"status": 0,user_id:req.body.email});
 
             });
 
     }else {
         res.statusCode = 400;
-        res.send({"status": 0});
+        res.send({"status": 0,user_id:req.body.email});
     }
 
 });
-app.post("/create-user", function(req, res) {
 
+app.post("/profile",function(req,res){
+    
+    console.log(req.jwt);
+    res.send('helloworld');
+});
+app.post("/create-user", function(req, res) {
     if (req.body.email && req.body.password) {
         password = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email));
         user_id = md5(md5(req.body.email) + md5(constants.PASS_SALT));
@@ -124,7 +130,7 @@ app.post("/create-user", function(req, res) {
                     cookieKey: cookieKey,
                     userId: user_id,
                     inTime: date.getTime() / 1000,
-                    timeout: (date.getTime() / 1000) + (1000)
+                    timeout: (date.getTime() / 1000) + (1000),
                     })
                     .then(function(meta) {                      
                         roles
@@ -134,23 +140,23 @@ app.post("/create-user", function(req, res) {
                                 }
                             }})
                             .then(function(userRoles) {
-                                res.send({status: 1, auth_token: authToken, roles: userRoles});
+                                res.send({status: 1,user_id:req.body.email, auth_token: authToken, roles: userRoles});
                             }, function(err) {
                                 console.log(err);
-                                res.send({status: 1, auth_token: authToken});
+                                res.send({status: 1,user_id:req.body.email, auth_token: authToken});
                             });
 
                     }, function(err) {
                         console.log(err);
-                        res.send({status: 0});
+                        res.send({status: 0,user_id:req.body.email});
                     });
             }, function(arg2, arg1) {
                 res.statusCode = 409;
-                res.send({"status": 0});
+                res.send({"status": 0,user_id:req.body.email});
             });
     } else {
         res.statusCode = 400;
-        res.send({"status": 0});
+        res.send({"status": 0,user_id:req.body.email});
     }
 
 });
