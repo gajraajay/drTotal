@@ -16,8 +16,7 @@ var UserSession = require('./../models/UserSession.js');
 var userRole = require('./../models/user_roles.js');
 
 var isValidate=require('./../middlewares/validate_user.js');
-var jwt=require('jwt-express');
-app.use(jwt.init('secret',{cookies: false}));
+
 
 
 app.use("/user/", isValidate);

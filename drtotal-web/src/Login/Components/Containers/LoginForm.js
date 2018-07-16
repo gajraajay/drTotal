@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
   Alert,
   Button,
@@ -19,59 +19,57 @@ import {
   Radio
 } from 'react-bootstrap';
 import Link from 'react-router-dom/Link';
-import {connect} from 'react-redux';
-import {Redirect} from 'react-router-dom';
-import {NavBar} from '../../../NAV/NavBar';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { NavBar } from '../../../NAV/NavBar';
+import axios from 'axios';
 
 class LoginForm extends Component {
-  constructor(props) {
-    super(props)
-    console.log("constru");
-    this.clearNotification = this
-      .clearNotification
-      .bind(this);
-    this.handleFormSubmit = this
-      .handleFormSubmit
-      .bind(this);
+  constructor( props ) {
+    super( props );
+    this.clearNotification = this.clearNotification.bind( this );
+    this.handleFormSubmit = this.handleFormSubmit.bind( this );
+    this.handleProileUpdate=this.handleProileUpdate.bind( this );
+    // this.selectedOption=this.selectedOption.bind( this );
   }
 
   static defaultProps = {};
-  componentDidMount() {}
-  shouldComponentUpdate(nextProps, nextState) {
+  componentDidMount( ) {}
+  shouldComponentUpdate( nextProps, nextState ) {
 
-    console.log(nextProps, nextState);
+    console.log( nextProps, nextState );
     return true;
   }
-  componentDidUpdate(prevProps, prevState, snapShot) {
-    console.log("didupdate");
+  componentDidUpdate( prevProps, prevState, snapShot ) {
+    console.log( "didupdate" );
   }
-  clearNotification(e, props) {
-    this
-      .props
-      .UpdateNotification();
+  clearNotification( e, props ) {
+    this.props.UpdateNotification( );
   }
 
-  handleFormSubmit(e) {
-    e.preventDefault();
+  handleFormSubmit( e ) {
+    e.preventDefault( );
     const formData = {};
-    if (this.props.type == "signup") {
-      this
-        .props
-        .SignUpToServer(this.email.value, this.password.value, this.cnfPassword.value);
+    if ( this.props.type == "signup" ) {
+      this.props.SignUpToServer( this.email.value, this.password.value, this.cnfPassword.value );
     } else {
-      this
-        .props
-        .LoginToServer(this.email.value, this.password.value);
+      this.props.LoginToServer( this.email.value, this.password.value );
     }
   }
+  handleProileUpdate( e ){
+    e.preventDefault( );
+    console.log(this);
+    console.log(this.name.value);
+    console.log("we reached here");
+  }
 
-  render() {
-    if (this.props.Login.login == true) {
-      if (this.props.data.status == 1 && !this.props.showRoles) {
-        return <Redirect to='/'/>
+  render( ) {
+    if ( this.props.Login.login == true ) {
+      if ( this.props.data.status == 1 && !this.props.showRoles ) {
+        return <Redirect to='/' />
       }
     } else {}
-    if (this.props.type != 'signup') {
+    if ( this.props.type != 'signup' ) {
       return (
         <div className="loginPanel">
           <Col xs={12} md={4} mdOffset={4}>
@@ -80,7 +78,7 @@ class LoginForm extends Component {
                 <img
                   className="pb-sm"
                   src="https://graphicdesignbylisa.com/wp-content/uploads/generic-logo.jpg"
-                  width="100"/>
+                  width="100" />
                 <div className="pb-sm">
                   <h4>Sign in</h4>
                   <h5>to contiue on portal...</h5>
@@ -89,35 +87,25 @@ class LoginForm extends Component {
                   <FormGroup validationState={this.props.emailStatus}>
                     <ControlLabel>UserName/Email</ControlLabel>
                     <FormControl
-                      inputRef={(ref) => {
+                      inputRef={( ref ) => {
                       this.email = ref
                     }}
                       type="text"
                       onChange={this.clearNotification}
-                      placeholder="Enter Email/ UserName"/>
-                    <HelpBlock
-                      className={this.props.emailStatus == 'error'
-                      ? ''
-                      : 'hide'}>{this.props.emailStatus == 'error'
-                        ? this.props.errorMessage
-                        : ''}
+                      placeholder="Enter Email/ UserName" />
+                    <HelpBlock className={this.props.emailStatus == 'error' ? '' : 'hide'}>{this.props.emailStatus == 'error' ? this.props.errorMessage : ''}
                     </HelpBlock>
                   </FormGroup>
                   <FormGroup validationState={this.props.passwordStatus}>
                     <ControlLabel>Password</ControlLabel>
                     <FormControl
-                      inputRef={(ref) => {
+                      inputRef={( ref ) => {
                       this.password = ref
                     }}
                       className="formControll"
                       type="password"
-                      placeholder="Enter password"/>
-                    <HelpBlock
-                      className={this.props.passwordStatus == 'error'
-                      ? ''
-                      : 'hide'}>{this.props.passwordStatus == 'error'
-                        ? this.props.errorMessage
-                        : ''}</HelpBlock>
+                      placeholder="Enter password" />
+                    <HelpBlock className={this.props.passwordStatus == 'error' ? '' : 'hide'}>{this.props.passwordStatus == 'error' ? this.props.errorMessage : ''}</HelpBlock>
                   </FormGroup>
                   <FormGroup>
                     <Button bsStyle="primary" type="submit">Sign in</Button>
@@ -135,38 +123,47 @@ class LoginForm extends Component {
         </div>
 
       );
-    } else if (this.props.showRoles == true) {
+    } else if ( this.props.showRoles == true ) {
 
       return (
         <div>
-          <NavBar/>
+          <NavBar />
           <Col xs={12} md={4} mdOffset={4}>
             <Panel>
+              
               <Panel.Heading>
-                Tell us who are you...?
+                Tell more about your self.
               </Panel.Heading>
+
               <Panel.Body>
-{this.props.data.user_id}
+                
+                {this.props.data.user_id}
+                <form  onSubmit={this.handleProileUpdate}>
+                <FormGroup validationState={this.props.emailStatus}>
+                    <ControlLabel>Name</ControlLabel>
+                    <FormControl
+                      inputRef={( ref ) => {
+                      this.name = ref
+                    }}
+                      type="text"                      
+                      placeholder="FirstName LastName" />                    
+                  </FormGroup>                  
                 <FormGroup>
-                  {this
-                    .props
-                    .data
-                    .roles
-                    .map(function (object, i) {
-                      return <div>
-                        <Radio name="radioGroup">
-                          {object.roleName}
-                        </Radio>
-
-                      </div>
-
-                    })}
+                  
+                  {this.props.data.roles.map((role, i ) =>(           
+                     
+                     <Radio  inputRef={ref => { this.input = role.roleName }} name="roleOption" key={role.roleId} defaultChecked={role.roleId == 2 ? true:false}>
+                        {role.roleName} 
+                      </Radio>
+                    
+                  ))}
                 </FormGroup>
                 <FormGroup>
                   <Col smOffset={8} sm={2}>
-                    <Button type="submit" bsStyle="primary">Sign in</Button>
+                    <Button  type="submit" bsStyle="primary">Sign in</Button>
                   </Col>
                 </FormGroup>
+                </form>
               </Panel.Body>
             </Panel>
           </Col>
@@ -181,7 +178,7 @@ class LoginForm extends Component {
                 <img
                   className="pb-sm"
                   src="https://graphicdesignbylisa.com/wp-content/uploads/generic-logo.jpg"
-                  width="100"/>
+                  width="100" />
                 <div className="pb-sm">
                   <h4></h4>
                   <h5>one place solution for your healthcare...</h5>
@@ -190,53 +187,38 @@ class LoginForm extends Component {
                   <FormGroup validationState={this.props.emailStatus}>
                     <ControlLabel>UserName/Email</ControlLabel>
                     <FormControl
-                      inputRef={(ref) => {
+                      inputRef={( ref ) => {
                       this.email = ref
                     }}
                       type="text"
                       onChange={this.clearNotification}
-                      placeholder="Enter Email/ UserName"/>
-                    <HelpBlock
-                      className={this.props.emailStatus == 'error'
-                      ? ''
-                      : 'hide'}>{this.props.emailStatus == 'error'
-                        ? this.props.errorMessage
-                        : ''}
+                      placeholder="Enter Email/ UserName" />
+                    <HelpBlock className={this.props.emailStatus == 'error' ? '' : 'hide'}>{this.props.emailStatus == 'error' ? this.props.errorMessage : ''}
                     </HelpBlock>
                   </FormGroup>
                   <FormGroup validationState={this.props.passwordStatus}>
                     <ControlLabel>Password</ControlLabel>
                     <FormControl
-                      inputRef={(ref) => {
+                      inputRef={( ref ) => {
                       this.password = ref
                     }}
                       className="formControll"
                       onChange={this.clearNotification}
                       type="password"
-                      placeholder="Enter password"/>
-                    <HelpBlock
-                      className={this.props.passwordStatus == 'error'
-                      ? ''
-                      : 'hide'}>{this.props.passwordStatus == 'error'
-                        ? this.props.errorMessage
-                        : ''}</HelpBlock>
+                      placeholder="Enter password" />
+                    <HelpBlock className={this.props.passwordStatus == 'error' ? '' : 'hide'}>{this.props.passwordStatus == 'error' ? this.props.errorMessage : ''}</HelpBlock>
                   </FormGroup>
                   <FormGroup validationState={this.props.confirmPasswordStatus}>
                     <ControlLabel>Password</ControlLabel>
                     <FormControl
-                      inputRef={(ref) => {
+                      inputRef={( ref ) => {
                       this.cnfPassword = ref
                     }}
                       className="formControll"
                       onChange={this.clearNotification}
                       type="password"
-                      placeholder="Enter password"/>
-                    <HelpBlock
-                      className={this.props.confirmPasswordStatus == 'error'
-                      ? ''
-                      : 'hide'}>{this.props.confirmPasswordStatus == 'error'
-                        ? this.props.errorMessage
-                        : ''}</HelpBlock>
+                      placeholder="Enter password" />
+                    <HelpBlock className={this.props.confirmPasswordStatus == 'error' ? '' : 'hide'}>{this.props.confirmPasswordStatus == 'error' ? this.props.errorMessage : ''}</HelpBlock>
                   </FormGroup>
                   <FormGroup>
                     <Button bsStyle="primary" type="submit">Enroll me</Button>
@@ -258,20 +240,20 @@ class LoginForm extends Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = ( state, ownProps ) => {
   ownProps = state.Login;
-  if (ownProps) 
+  if ( ownProps ) 
     return ownProps;
   else {
-    return {}
+    return { }
   }
 
 };
 
-const mapDispatchToProps = function (dispatch, ownProps) {
+const mapDispatchToProps = function ( dispatch, ownProps ) {
   return {
     ...ownProps,
     dispatch: dispatch
   };
 }
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm);
+export default connect( mapStateToProps, mapDispatchToProps )( LoginForm );

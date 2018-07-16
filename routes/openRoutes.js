@@ -14,9 +14,8 @@ var roles = require('./../models/roles.js');
 var jwt=require('jwt-express');
 const Op = Sequelize.Op;
 
-
 app.get("/demo", function(req, res,data) {        
-    res.send(jwt.create('cool',{name:'something',token:'hey-something'}));        
+    res.send(res.jwt({name:'something',token:'hey-something'}));        
 });
 app.post("/validate-user", function(req, res) {
     if (req.body.email && req.body.password) {
@@ -40,7 +39,7 @@ app.post("/validate-user", function(req, res) {
                                     if (usersMeta.length > 0) {
                                         if(users[0].user_id==usersMeta[0].userId){                                            
                                         }
-                                        res.send({status: 1, auth_token: usersMeta[0].cookieKey,jwt:jwt.create('dummy-screte',{c_session:usersMeta[0].cookieKey}).token});
+                                        res.send({status: 1, auth_token: usersMeta[0].cookieKey,jwt:res.jwt({c_session:usersMeta[0].cookieKey}).token});
                                     } else {
                                         date = new Date();
                                         authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
@@ -53,7 +52,7 @@ app.post("/validate-user", function(req, res) {
                                             timeout: (date.getTime() / 1000) + (1000)
                                             })
                                             .then(function(meta) {     
-                                                res.send({status: 1,user_id:req.body.email,auth_token: cookieKey,jwt:jwt.create('dummy-screte',{c_session:cookieKey}).token});                                                
+                                                res.send({status: 1,user_id:req.body.email,auth_token: cookieKey,jwt:res.jwt({c_session:cookieKey}).token});                                                
                                             }, function(err) {
                                                 res.send({status: 0,user_id:req.body.email, error: err});
                                             });
@@ -74,7 +73,7 @@ app.post("/validate-user", function(req, res) {
                                 timeout: (date.getTime() / 1000) + (1000)
                                 })
                                 .then(function(meta) {                                    
-                                    res.send({status: 1,user_id:req.body.email, auth_token: cookieKey});
+                                    res.send({status: 1,user_id:req.body.email, auth_token: cookieKey,jwt:res.jwt({c_session:cookieKey}).token});
                                 }, function(err) {
                                     console.log(err);
                                     res.send({status: 0,user_id:req.body.email});
@@ -101,10 +100,8 @@ app.post("/validate-user", function(req, res) {
 
 });
 
-app.post("/profile",function(req,res){
-    
-    console.log(req.jwt);
-    res.send('helloworld');
+app.post("/profile",jwt.active(),function(req,res){
+    res.send(JSON.stringify(req.jwt));    
 });
 app.post("/create-user", function(req, res) {
     if (req.body.email && req.body.password) {
@@ -140,10 +137,10 @@ app.post("/create-user", function(req, res) {
                                 }
                             }})
                             .then(function(userRoles) {
-                                res.send({status: 1,user_id:req.body.email, auth_token: authToken, roles: userRoles});
+                                res.send({status: 1,user_id:req.body.email, auth_token: authToken, roles: userRoles,jwt:res.jwt({c_session:cookieKey}).token});
                             }, function(err) {
                                 console.log(err);
-                                res.send({status: 1,user_id:req.body.email, auth_token: authToken});
+                                res.send({status: 1,user_id:req.body.email,auth_token: authToken,jwt:res.jwt({c_session:cookieKey}).token});
                             });
 
                     }, function(err) {
@@ -160,4 +157,15 @@ app.post("/create-user", function(req, res) {
     }
 
 });
+
+app.use(function(err, req, res, next){
+    if(err.name == 'JWTExpressError'){
+        res.status(401);        
+        
+    }else{
+        res.status(500);        
+    }   
+    
+    res.send("err")
+})
 module.exports = app;

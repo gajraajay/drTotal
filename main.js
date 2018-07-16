@@ -1,6 +1,5 @@
 var express = require("express");
 var routes = require('./routes/routes.js');
-// var userModle = require('./models/users.js');
 const CONSTANTS = require('./utils/constants.js');
 var app = express();
 const User = require('./models/user.js');
@@ -9,8 +8,14 @@ const user_role = require('./models/user_roles.js');
 const role = require('./models/roles.js');
 var UserSession = require('./models/UserSession.js');
 var Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+var jwt=require('jwt-express');
+
+
 var time=0;
+
+
+const Op = Sequelize.Op;
+
 (function timerTask(){
     let currentTime=new Date().getTime()/1000;    
         UserSession.destroy({
@@ -23,8 +28,10 @@ var time=0;
     time=currentTime;
     setTimeout(timerTask,5000,'happy');
 })();
+
+
 let addHeader=function(req,res,next){   
-    console.log(req.get('Token'));
+
     try{
         res.setHeader('Access-Control-Allow-Origin', req.headers.origin);
     }catch(e){
@@ -38,6 +45,7 @@ let addHeader=function(req,res,next){
     next();
 }
 app.use(addHeader);
+app.use(jwt.init('secret',{cookies: false,refresh:false}));
 
 routes.use('/api/v1/', require('./routes/openRoutes.js'));
 

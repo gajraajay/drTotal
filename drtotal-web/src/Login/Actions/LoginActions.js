@@ -7,7 +7,7 @@ import cookie from 'react-cookies'
 import { STATUS_CODES } from "http";
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.headers.post['Token'] = localStorage.getItem('dt_auth_key');
-
+axios.defaults.headers.post['Authorization'] = "Bearer "+ localStorage.getItem('jwt');
 
 
 export function UpdateNotification(state){
@@ -18,6 +18,15 @@ export function UpdateNotification(state){
             }
         })
     } 
+}
+export function CompleteProfile(){    
+    axios.post(
+      'http://localhost:7071/api/v1/profile',  { withCredentials: true,Authorization:"Bearer "+ localStorage.getItem('jwt') })
+  .then(res => {                                
+    console.log(res);
+  },(error)=>{           
+    console.log(error);
+  });
 }
 export function SignUpToServer(email,password,confirmPassword){
     var error=false;

@@ -21,7 +21,7 @@ const LoginReducer = (state = initialState, action) => {
             {   
                 localStorage.setItem('login',JSON.stringify({...action.payload}));
                 localStorage.setItem('dt_auth_key',action.payload.data.auth_token);
-                // localStorage.setItem('c_session',action.payload.data.jwt);
+                localStorage.setItem('jwt',action.payload.data.jwt);
                 return {...action.payload
                 }
 
