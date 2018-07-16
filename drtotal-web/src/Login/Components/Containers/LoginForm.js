@@ -58,6 +58,7 @@ class LoginForm extends Component {
   }
   handleProileUpdate( e ){
     e.preventDefault( );
+    console.log(this.refs);
     console.log(this);
     console.log(this.name.value);
     console.log("we reached here");
@@ -151,11 +152,13 @@ class LoginForm extends Component {
                 <FormGroup>
                   
                   {this.props.data.roles.map((role, i ) =>(           
+                     <div key={i}>
                      
-                     <Radio  inputRef={ref => { this.input = role.roleName }} name="roleOption" key={role.roleId} defaultChecked={role.roleId == 2 ? true:false}>
-                        {role.roleName} 
-                      </Radio>
-                    
+                     <Radio type="radio" key={i} onChange={this.handleProileUpdate} inputRef={(ref)=>{console.log(this);this.input=ref}}name="role">{role.roleName} </Radio><p>{role.roleName} </p>                    
+                    {/* //  <input type="radio"   onClick={this.handleProileUpdate} name="roleOption" key={role.roleId} defaultChecked={role.roleId == 2 ? true:false}>
+                    //     {role.roleName} 
+                    //   </input> */}
+                    </div>
                   ))}
                 </FormGroup>
                 <FormGroup>
