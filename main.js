@@ -16,18 +16,18 @@ var time=0;
 
 const Op = Sequelize.Op;
 
-(function timerTask(){
-    let currentTime=new Date().getTime()/1000;    
-        UserSession.destroy({
-            where :{
-                timeout : {
-                    [Op.lte]:currentTime
-                }
-            }
-        });    
-    time=currentTime;
-    setTimeout(timerTask,5000,'happy');
-})();
+// (function timerTask(){
+//     let currentTime=new Date().getTime()/1000;    
+//         UserSession.destroy({
+//             where :{
+//                 timeout : {
+//                     [Op.lte]:currentTime
+//                 }
+//             }
+//         });    
+//     time=currentTime;
+//     setTimeout(timerTask,5000,'happy');
+// })();
 
 
 let addHeader=function(req,res,next){   
