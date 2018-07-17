@@ -32,7 +32,7 @@ const LoginReducer = (state = initialState, action) => {
                  
             }
          default :{ 
-            return{...action.payload}            
+            return{...state,...action.payload}            
             }
 
     }

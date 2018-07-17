@@ -58,10 +58,9 @@ class LoginForm extends Component {
   }
   handleProileUpdate( e ){
     e.preventDefault( );
-    console.log(this.refs);
-    console.log(this);
-    console.log(this.name.value);
-    console.log("we reached here");
+    this.props.CompleteProfile(this.name.value,this.selectedRole);
+
+
   }
 
   render( ) {
@@ -140,9 +139,9 @@ class LoginForm extends Component {
                 
                 {this.props.data.user_id}
                 <form  onSubmit={this.handleProileUpdate}>
-                <FormGroup validationState={this.props.emailStatus}>
+                <FormGroup validationState={this.props.nameStatus}>
                     <ControlLabel>Name</ControlLabel>
-                    <FormControl
+                    <FormControl onChange={this.clearNotification}
                       inputRef={( ref ) => {
                       this.name = ref
                     }}
@@ -151,14 +150,11 @@ class LoginForm extends Component {
                   </FormGroup>                  
                 <FormGroup>
                   
-                  {this.props.data.roles.map((role, i ) =>(           
-                     <div key={i}>
-                     
-                     <Radio type="radio" key={i} onChange={this.handleProileUpdate} inputRef={(ref)=>{console.log(this);this.input=ref}}name="role">{role.roleName} </Radio><p>{role.roleName} </p>                    
-                    {/* //  <input type="radio"   onClick={this.handleProileUpdate} name="roleOption" key={role.roleId} defaultChecked={role.roleId == 2 ? true:false}>
-                    //     {role.roleName} 
-                    //   </input> */}
-                    </div>
+                  {this.props.data.roles.map((role, i ) =>(
+                     <Radio onChange={()=>{this.selectedRole=role}} inputRef={ref => { role.roleId==1?this.selectedRole = role:'' }} name="roleOption" key={role.roleId} defaultChecked={role.roleId == 1? true:false}>
+                        {role.roleName} 
+                     </Radio>
+                    
                   ))}
                 </FormGroup>
                 <FormGroup>
@@ -244,6 +240,7 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = ( state, ownProps ) => {
+  console.log(ownProps);
   ownProps = state.Login;
   if ( ownProps ) 
     return ownProps;
