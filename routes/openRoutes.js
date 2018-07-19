@@ -234,6 +234,17 @@ app.post( "/create-user", function ( req, res ) {
       reg_time: date.getTime( ) / 1000,
       user_id: user_id
     }).then( function ( user ) {
+      var currentUser = {
+        contact: contact,
+        email: user.email,
+        firstName: user.firstName,
+        id: user.id,
+        lastName: user.lastName,
+        meta_info: user.meta_info,
+        reg_time: user.reg_time,
+        user_id: user.user_id
+      }
+      console.log(user);
       date = new Date( );
       authToken = md5(md5( req.body.password ) + md5( constants.PASS_SALT ) + md5( req.body.email ) + md5(date.getTime( )));
       cookieKey = md5(authToken + md5(date.getTime( )));
@@ -258,7 +269,8 @@ app.post( "/create-user", function ( req, res ) {
             role: 0,
             roles: userRoles,
             status: 1,
-            user_id: req.body.email
+            user_id: req.body.email,
+            user:currentUser
           });
         }, function ( err ) {
           res.send({
@@ -268,20 +280,20 @@ app.post( "/create-user", function ( req, res ) {
             role: 0,
             status: 1,
             status: 1,
-            user_id: req.body.email
+            user_id: req.body.email,user:{}
           });
         });
 
       }, function ( err ) {
-        res.send({ status: 0, user_id: req.body.email });
+        res.send({ user:{},status: 0, user_id: req.body.email });
       });
     }, function ( arg2, arg1 ) {
       res.statusCode = 409;
-      res.send({ "status": 0, user_id: req.body.email });
+      res.send({ "status": 0,user:{}, user_id: req.body.email });
     });
   } else {
     res.statusCode = 400;
-    res.send({ "status": 0, user_id: req.body.email });
+    res.send({ "status": 0,user:{}, user_id: req.body.email });
   }
 
 });
