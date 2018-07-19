@@ -7,6 +7,9 @@ import {connect} from 'react-redux';
 import { Navbar } from 'react-bootstrap';
 import LoginForm from '../Login/Components/Containers/LoginForm';
 
+
+
+
 const DrTotalRouter = (props) => <Router>
   <div>
     <Route
@@ -17,13 +20,15 @@ const DrTotalRouter = (props) => <Router>
         switch (props.stage) {
           case 'login':
           if(props.showRoles)
-            return <Redirect to='/signup'/>            
+            return <Redirect to='/signup'/>  
+
             return (              
               <div><NavBar/>
-                <p>{props.data.jwt}</p>       
+                <p>{JSON.stringify(props.user)} </p>       
               </div>
             );
-          case 'signup':
+          
+            case 'signup':
             return (              
               <Redirect to='/signup'/>
             );

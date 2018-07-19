@@ -1,4 +1,4 @@
-import { LOGIN_FAIL, LOGIN_SUCCESS } from "./types";
+import { LOGIN_FAIL, LOGIN_SUCCESS, PROFILE_SUCCESS } from "./types";
 import axios from 'axios';
 import cookie from 'react-cookies'
 import { STATUS_CODES } from "http";
@@ -33,9 +33,14 @@ export function CompleteProfile( name, role ) {
             dispatch({
               'payload': {
                 nameStatus: null,
-                error: false
+                error: false,
+                role:res.data.role,
+                user:res.data.user,
+                stage:'login',
+                login:true,
+                data:{status:1,...res.data}
               },
-              type: "default"
+              type: PROFILE_SUCCESS
             });
        
     }, ( error ) => {
@@ -113,6 +118,7 @@ export function SignUpToServer( email, password, confirmPassword ) {
                 dispatch({
                   'payload': {
                     data: res.data,
+                    user:res.data.user,
                     error: false,
                     login: true,
                     showRoles: true,
@@ -202,6 +208,7 @@ export function LoginToServer( email, password ) {
             if ( res.data.status == 1 ) {
               dispatch({
                 'payload': {
+                  user:res.data.user,
                   data: res.data,
                   login: true,
                   stage: 'login'
