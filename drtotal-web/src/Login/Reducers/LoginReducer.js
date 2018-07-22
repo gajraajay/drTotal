@@ -7,6 +7,10 @@ const initialState = {};
 const LoginReducer = ( state = initialState, action ) => {
   switch ( action.type ) {
     case CLEAR:
+    
+    localStorage.removeItem('login');
+    localStorage.removeItem( 'dt_auth_key');
+    localStorage.removeItem( 'jwt');
       {
         return { }
       }

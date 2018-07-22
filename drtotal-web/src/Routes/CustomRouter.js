@@ -47,14 +47,14 @@ const DrTotalRouter = (props) => <Router>
     <Route
       path="/login"
       component={() => (
-      <LoginPage errorCode='this is something fishi' type='login'></LoginPage>
+      <LoginPage errorCode=' ' type='login'></LoginPage>
     )}/>
 
     <Route
       path="/signup"
       component={() => {
       return (
-        <LoginPage errorCode='this is something fishi' type='signup'></LoginPage>
+        <LoginPage errorCode=' ' type='signup'></LoginPage>
       )
     }}/>
   </div>

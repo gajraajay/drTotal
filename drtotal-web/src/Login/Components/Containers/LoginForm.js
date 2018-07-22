@@ -147,7 +147,6 @@ class LoginForm extends Component {
 
       );
     } else if (this.props.showRoles == true) {
-
       return (
         <div>
           <NavBar/>

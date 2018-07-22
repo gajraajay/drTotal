@@ -225,16 +225,37 @@ export function LoginToServer(email, password) {
           switch (res.status) {
             case 200:
               if (res.data.status == 1) {
-                dispatch({
-                  'payload': {
-                    user: res.data.user,
-                    data: res.data,
-                    login: true,
-                    stage: 'login'
-                  },
-                  type: LOGIN_SUCCESS
-                });
+                if (res.data.role == 0) {
+                  dispatch({
+                    'payload': {
+                      data: res.data,
+                      user: res.data.user,
+                      error: false,
+                      login: true,
+                      showRoles: true,
+                      role: res.data.role,
+                      stage: 'signup',
+                      confirmPasswordStatus: null,
+                      emailStatus: null,
+                      error: false,
+                      nameStatus: null,
+                      passwordStatus: null
 
+                    },
+                    type: LOGIN_SUCCESS
+                  });
+                } else {
+                  dispatch({
+                    'payload': {
+                      role: res.data.role,
+                      user: res.data.user,
+                      data: res.data,
+                      login: true,
+                      stage: 'login'
+                    },
+                    type: LOGIN_SUCCESS
+                  });
+                }
                 break;
               } else {
                 error = 'Hey, we can\'t find your account';
