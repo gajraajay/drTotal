@@ -2,15 +2,16 @@ import { LOGIN_FAIL, LOGIN_SUCCESS, PROFILE_SUCCESS } from "../Actions/types";
 import cookie from 'react-cookies';
 import { REHYDRATE, PURGE } from 'redux-persist';
 import { CLEAR } from "../../Reducers/RootReducer";
+import { injectReducers } from "../../Store";
 
 const initialState = {};
 const LoginReducer = ( state = initialState, action ) => {
   switch ( action.type ) {
-    case CLEAR:
-    
+    case CLEAR:    
     localStorage.removeItem('login');
     localStorage.removeItem( 'dt_auth_key');
-    localStorage.removeItem( 'jwt');
+    localStorage.removeItem( 'jwt');    
+    console.log(injectReducers());
       {
         return { }
       }
