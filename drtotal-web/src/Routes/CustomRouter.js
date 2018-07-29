@@ -80,8 +80,8 @@ const DrTotalRouter = (props) => <Router>
 
 
 const mapStateToProps = (state, ownProps) => {
-  if (state.Login.login) {    
-    return state.Login;
+  if (state.User.login) {    
+    return state.User;
   } else {
     return {}
   }

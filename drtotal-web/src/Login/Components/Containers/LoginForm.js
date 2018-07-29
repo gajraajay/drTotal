@@ -77,7 +77,7 @@ class LoginForm extends Component {
   }
 
   render() {
-    if (this.props.Login.login == true) {
+    if (this.props.User.login == true) {
       if (this.props.data.status == 1 && !this.props.showRoles) {
         return <Redirect to='/'/>
       }
@@ -296,7 +296,7 @@ class LoginForm extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   console.log(ownProps);
-  ownProps = state.Login;
+  ownProps = state.User;
   if (ownProps) 
     return ownProps;
   else {

@@ -64,7 +64,7 @@ function handleSelect(e){
       </Nav> */}
 
       <Nav onSelect={handleSelect} pullRight>{
-        store.getState().Login.login ? (<NavItem  eventKey={'signout'} href="#">
+        store.getState().User.login ? (<NavItem  eventKey={'signout'} href="#">
         Log out
       </NavItem>):(<Redirect to='/login'  />)
       }

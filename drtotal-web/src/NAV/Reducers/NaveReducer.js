@@ -25,7 +25,7 @@ const NavReducer = ( state = initialState, action ) => {
       }
     case LOGIN_FAIL:
       {
-        return { }
+        return {...state }
       }
     case PROFILE_SUCCESS:
       {
