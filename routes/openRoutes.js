@@ -18,8 +18,12 @@ var UserRole = require('./../models/user_roles.js');
 var roles = require('./../models/roles.js');
 var jwt = require('jwt-express');
 const Op = Sequelize.Op;
+var responseHelper = require('./../helpers/responseHelper.js');
 
 app.get("/demo", function (req, res, data) {
+
+  // responseHelper.sendError(req,res,res.jwt({name: 'something', token:
+  // 'hey-something'}));
   res.send(res.jwt({name: 'something', token: 'hey-something'}));
 });
 
@@ -48,7 +52,7 @@ app.post("/validate-user", function (req, res) {
                 }
               })
                 .then(UsersMeta => {
-                  if (UsersMeta !=null) {
+                  if (UsersMeta != null) {
                     if (User.user_id == usersMeta.userId) {}
                     UserRole
                       .find({
@@ -110,7 +114,6 @@ app.post("/validate-user", function (req, res) {
                       }, err => {
                         console.log("Error");
                         console.log(err);
-
                       });
 
                   } else {
@@ -260,7 +263,6 @@ app.post("/profile", jwt.active(), function (req, res) {
         }
       })
       .then(function (UserSessions) {
-        console.log(UserSessions);
         var currentUserId = UserSessions[0].userId;
         return sequelize.transaction(function (t) {
           return UserRole.create({
@@ -299,7 +301,7 @@ app.post("/profile", jwt.active(), function (req, res) {
             })
               .then((user) => {
                 var currentUser = {
-                  contact: contact,
+                  contact: user.contact,
                   email: user.email,
                   firstName: user.firstName,
                   id: user.id,
@@ -342,90 +344,79 @@ app.post("/profile", jwt.active(), function (req, res) {
   }
 });
 
+/**
+ * TODO add trasections
+ */
+
+/**
+ * Post method to update the user information and complete the profile.
+ * accepts Name and role as the form-para.
+ * should be called imidiatly after signup process to complete the registration process.
+ * returns current user state.
+ */
 app.post("/create-user", function (req, res) {
+
   if (req.body.email && req.body.password) {
-
-    password = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email));
-    user_id = md5(md5(req.body.email) + md5(constants.PASS_SALT));
-
-    contact = {
+    let date = new Date();
+    let password = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email));
+    let user_id = md5(md5(req.body.email) + md5(constants.PASS_SALT));
+    let reg_time = date.getTime() / 1000;
+    let authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
+    let cookieKey = md5(authToken + md5(date.getTime()));
+    let contact = {
       primary_email: req.body.email
     };
 
-    date = new Date();
-
-    User.create({
-      contact: JSON.stringify(contact),
-      email: req.body.email,
-      password: password,
-      reg_time: date.getTime() / 1000,
+    sequelize.transaction(function (t) {
+      return User.create({
+        contact: JSON.stringify(contact),
+        email: req.body.email,
+        password: password,
+        reg_time: reg_time,
         user_id: user_id
-      })
-      .then(function (user) {
-        var currentUser = {
-          contact: contact,
-          email: user.email,
-          firstName: user.firstName,
-          id: user.id,
-          lastName: user.lastName,
-          meta_info: user.meta_info,
-          reg_time: user.reg_time,
-          user_id: user.user_id
-        }
-        console.log(user);
-        date = new Date();
-        authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
-        cookieKey = md5(authToken + md5(date.getTime()));
-        UserSession.create({
-          authToken: authToken,
-          cookieKey: cookieKey,
-          inTime: date.getTime() / 1000,
-          timeout: (date.getTime() / 1000) + (1000),
-            userId: user.user_id
-          })
-          .then(function (meta) {
-            roles.findAll({
-              where: {
-                roleId: {
-                  [Op.gt]: 0
-                  }
-                }
-              })
-              .then(function (userRoles) {
-                res.send({
-                  auth_token: authToken,
-                  jwt: res
-                    .jwt({c_session: cookieKey})
-                    .token,
-                  name: '',
-                  role: 0,
-                  roles: userRoles,
-                  status: 1,
-                  user: currentUser,
-                  user_id: req.body.email
-                });
-              }, function (err) {
-                res.send({
-                  auth_token: authToken,
-                  jwt: res
-                    .jwt({c_session: cookieKey})
-                    .token,
-                  name: '',
-                  role: 0,
-                  status: 1,
-                  status: 1,
-                  user: {},
-                  user_id: req.body.email
-                });
-              });
+      }, {transaction: t})
+        .then(function (user) {
 
-          }, function (err) {
-            res.send({status: 0, user: {}, user_id: req.body.email});
+          return UserSession.create({
+            authToken: authToken,
+            cookieKey: cookieKey,
+            inTime: date.getTime() / 1000,
+            timeout: (date.getTime() / 1000) + (1000),
+            userId: user.user_id
+          }, {transaction: t})
+        });
+    }).then((userSession) => {
+      roles
+        .findAll()
+        .then(function (userRoles) {
+          res.send({
+            auth_token: authToken,
+            jwt: res
+              .jwt({c_session: cookieKey})
+              .token,
+            name: '',
+            role: 0,
+            roles: userRoles,
+            status: 1,
+            user: {
+              contact: contact,
+              email: req.body.email,
+              firstName: 'User',
+              lastName: 'Name',
+              meta_info: null,
+              reg_time: reg_time,
+              user_id: user_id
+            },
+            user_id: req.body.email
           });
-      }, function (arg2, arg1) {
-        res.statusCode = 409;
-        res.send({"status": 0, user: {}, user_id: req.body.email});
-      });
+        }, function (err) {
+          res.statusCode = 409;
+          res.send({status: 0, user: {}, user_id: req.body.email});
+        });
+    }, (err) => {
+      res.statusCode = 409;
+      res.send({status: 0, user: {}, user_id: req.body.email});
+    });
   } else {
     res.statusCode = 400;
     res.send({"status": 0, user: {}, user_id: req.body.email});
@@ -440,7 +431,7 @@ app.use(function (err, req, res, next) {
     console.log(err);
     res.status(500);
   }
-  res.send("err")
+  res.send(err)
 });
 
 module.exports = app;
