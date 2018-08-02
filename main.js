@@ -16,8 +16,8 @@ const Op = Sequelize.Op;
 
 // (function timerTask(){     let currentTime=new Date().getTime()/1000;
 // UserSession.destroy({             where :{                 timeout : {
-//              [Op.lte]:currentTime                 }             }         });
-//     time=currentTime;     setTimeout(timerTask,5000,'happy'); })();
+//       [Op.lte]:currentTime                 }             }         });
+// time=currentTime;     setTimeout(timerTask,5000,'happy'); })();
 
 let addHeader = function (req, res, next) {
   try {
@@ -33,9 +33,11 @@ let addHeader = function (req, res, next) {
   next();
 }
 app.use(addHeader);
-app.use(jwt.init('secret', {
+app.use(jwt.init((req,data) => {
+  return "helloworld" 
+}, {
   cookies: false,
-  refresh: false
+  refresh: true
 }));
 
 routes.use('/api/v1/', require('./routes/openRoutes.js'));

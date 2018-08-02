@@ -255,44 +255,41 @@ app.post("/validate-user", function (req, res) {
 app.post("/profile", jwt.active(), function (req, res) {
 
   if (req.body.name && req.body.role) {
+    let currentUserId = req.jwt.payload.user_id;
+    let name = req
+      .body
+      .name
+      .split(" ");      
+      if (name.length < 2) {
+        name.push("");
+      }
 
     UserSession
-      .findAll({
+      .find({
         where: {
           authToken: req.body.token
         }
       })
-      .then(function (UserSessions) {
-        var currentUserId = UserSessions[0].userId;
-        return sequelize.transaction(function (t) {
+      .then( (UserSession) =>{
+        return sequelize.transaction( (t)=> {
           return UserRole.create({
             roleIds: JSON
               .parse(req.body.role)
               .roleId,
-            userId: UserSessions[0].userId
+            userId: currentUserId
           }, {transaction: t})
-            .then(function (userRole) {
-
-              var name = req
-                .body
-                .name
-                .split(" ");
-
-              if (name.length < 2) {
-                name.push("");
-              }
-
+            .then( (userRole)=> {
               return User.update({
                 firstName: name[0],
                 lastName: name[1]
               }, {
                 where: {
-                  user_id: userRole.userId
+                  user_id: currentUserId
                 }
               }, {transaction: t});
             });
         })
-          .then(function (result) {
+          .then( (result)=> {
             User
               .find({
               where: {
@@ -303,8 +300,7 @@ app.post("/profile", jwt.active(), function (req, res) {
                 var currentUser = {
                   contact: user.contact,
                   email: user.email,
-                  firstName: user.firstName,
-                  id: user.id,
+                  firstName: user.firstName,                  
                   lastName: user.lastName,
                   meta_info: user.meta_info,
                   reg_time: user.reg_time,
@@ -328,25 +324,20 @@ app.post("/profile", jwt.active(), function (req, res) {
                 });
               });
 
-          })
-          .catch(function (err) {
-            res.statusCode = 409;
-            res.send({error: 'conflict', state: ''});
+          },(err)=>{
+            res.statusCode=401;
+            res.send({error: 'auth', state: ''});
           });
-      }, function (err) {
+      },  (err)=> {
         res.statusCode = 401;
-        res.send({error: 'auth', state: ''});
+        res.send({error: 'auth', user: '', state: ''});
       });
 
   } else {
     res.statusCode = 400;
-    res.send({error: 'bad_req', state: ''});
+    res.send({error: 'bad_req', state: '', user: ''});
   }
 });
-
-/**
- * TODO add trasections
- */
 
 /**
  * Post method to update the user information and complete the profile.
@@ -357,6 +348,7 @@ app.post("/profile", jwt.active(), function (req, res) {
 app.post("/create-user", function (req, res) {
 
   if (req.body.email && req.body.password) {
+
     let date = new Date();
     let password = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email));
     let user_id = md5(md5(req.body.email) + md5(constants.PASS_SALT));
@@ -376,7 +368,6 @@ app.post("/create-user", function (req, res) {
         user_id: user_id
       }, {transaction: t})
         .then(function (user) {
-
           return UserSession.create({
             authToken: authToken,
             cookieKey: cookieKey,
@@ -392,7 +383,7 @@ app.post("/create-user", function (req, res) {
           res.send({
             auth_token: authToken,
             jwt: res
-              .jwt({c_session: cookieKey})
+              .jwt({c_session: cookieKey, user_id: user_id})
               .token,
             name: '',
             role: 0,
