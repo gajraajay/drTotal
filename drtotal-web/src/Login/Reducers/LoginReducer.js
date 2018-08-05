@@ -10,8 +10,7 @@ const LoginReducer = ( state = initialState, action ) => {
     case CLEAR:    
     localStorage.removeItem('login');
     localStorage.removeItem( 'dt_auth_key');
-    localStorage.removeItem( 'jwt');    
-    console.log(injectReducers());
+    localStorage.removeItem( 'jwt');
       {
         return { }
       }
@@ -20,7 +19,7 @@ const LoginReducer = ( state = initialState, action ) => {
         console.log( action.payload );
         if ( action.payload ) {
           return {
-            ...action.payload.Login
+            ...action.payload.User
           };
         } else 
           return {

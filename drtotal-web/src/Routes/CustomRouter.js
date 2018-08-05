@@ -2,8 +2,9 @@ import React from 'react';
 import {BrowserRouter as Router, Route, Link,Switch} from "react-router-dom";
 import {LoginPage} from '../Login/Components/Containers/LoginContainer';
 import Redirect from 'react-router-dom/Redirect';
-import {NavBar} from '../NAV/NavBar'
+import NavBar  from '../NAV/NavBar'
 import {connect} from 'react-redux';
+import UserProfile from '../UserProfile/Components/UserProfile';
 
 /**
  * 
@@ -28,7 +29,7 @@ const DrTotalRouter = (props) => <Router>
 
             return (              
               <div><NavBar/>
-                <p>{JSON.stringify(props.user)} </p>       
+                <UserProfile/>
               </div>
             );
           

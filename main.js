@@ -88,4 +88,10 @@ app.listen(7071, function () {
     .then(function (user_roles) {
       console.log(user_roles + "created");
     });
+
+    User.hasMany(user_role, {foreignKey: 'userId'})
+    user_role.belongsTo(User, {foreignKey: 'userId'});
+    
+    role.hasMany(user_role, {foreignKey: 'roleIds'})
+    user_role.belongsTo(role, {foreignKey: 'roleIds'});
 });

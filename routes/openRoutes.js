@@ -29,9 +29,6 @@ app.get("/demo", function (req, res, data) {
 
 app.post("/validate-user", function (req, res) {
 
-  User.hasMany(UserRole, {foreignKey: 'userId'})
-  UserRole.belongsTo(User, {foreignKey: 'userId'});
-
   if (req.body.email && req.body.password) {
     User
       .find({
@@ -62,7 +59,6 @@ app.post("/validate-user", function (req, res) {
                     })
                       .then(userRole => {
                         if (userRole != null) {
-
                           res.send({
                             auth_token: UsersMeta.cookieKey,
                             jwt: res
@@ -117,6 +113,7 @@ app.post("/validate-user", function (req, res) {
                       });
 
                   } else {
+                    
                     date = new Date();
                     authToken = md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email) + md5(date.getTime()));
                     cookieKey = md5(authToken + md5(date.getTime()));
@@ -131,11 +128,15 @@ app.post("/validate-user", function (req, res) {
                       .then(function (meta) {
                         UserRole
                           .find({
+                            include: [{
+                              model: roles
+                            }],
                           where: {
                             userId: User.user_id
                           }
                         })
                           .then(userRole => {
+                            console.log(userRole.Role);
                             if (userRole != null) {
                               res.send({
                                 auth_token: authToken,
@@ -233,7 +234,6 @@ app.post("/validate-user", function (req, res) {
           res.send({"status": 0, user_id: req.body.email});
         }
       }, err => {
-        console.log(err);
         res.statusCode = 409;
         res.send({"status": 0, user_id: req.body.email});
 
@@ -259,76 +259,74 @@ app.post("/profile", jwt.active(), function (req, res) {
     let name = req
       .body
       .name
-      .split(" ");      
-      if (name.length < 2) {
-        name.push("");
-      }
+      .split(" ");
+    if (name.length < 2) {
+      name.push("");
+    }
 
     UserSession
       .find({
-        where: {
-          authToken: req.body.token
-        }
-      })
-      .then( (UserSession) =>{
-        return sequelize.transaction( (t)=> {
+      where: {
+        authToken: req.body.token
+      }
+    })
+      .then((UserSession) => {
+        return sequelize.transaction((t) => {
           return UserRole.create({
             roleIds: JSON
               .parse(req.body.role)
               .roleId,
             userId: currentUserId
-          }, {transaction: t})
-            .then( (userRole)=> {
-              return User.update({
-                firstName: name[0],
-                lastName: name[1]
-              }, {
-                where: {
-                  user_id: currentUserId
-                }
-              }, {transaction: t});
-            });
-        })
-          .then( (result)=> {
-            User
-              .find({
+          }, {transaction: t}).then((userRole) => {
+            return User.update({
+              firstName: name[0],
+              lastName: name[1]
+            }, {
               where: {
                 user_id: currentUserId
               }
-            })
-              .then((user) => {
-                var currentUser = {
-                  contact: user.contact,
-                  email: user.email,
-                  firstName: user.firstName,                  
-                  lastName: user.lastName,
-                  meta_info: user.meta_info,
-                  reg_time: user.reg_time,
-                  user_id: user.user_id
-                }
-                res.send({
-                  role: JSON.parse(req.body.role),
-                  state: 'login',
-                  user: currentUser
-                });
-
-              }, (err) => {
-                var currentUser = {
-                  name: req.body.name
-                }
-
-                res.send({
-                  role: JSON.parse(req.body.role),
-                  state: 'login',
-                  user: currentUser
-                });
+            }, {transaction: t});
+          });
+        }).then((result) => {
+          User
+            .find({
+            where: {
+              user_id: currentUserId
+            }
+          })
+            .then((user) => {
+              var currentUser = {
+                contact: user.contact,
+                email: user.email,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                meta_info: user.meta_info,
+                reg_time: user.reg_time,
+                user_id: user.user_id
+              }
+              res.send({
+                role: JSON.parse(req.body.role),
+                state: 'login',
+                user: currentUser
               });
 
-          },(err)=>{
-            res.statusCode=401;
-            res.send({error: 'auth', state: ''});
-          });
-      },  (err)=> {
+            }, (err) => {
+              var currentUser = {
+                name: req.body.name
+              }
+
+              res.send({
+                role: JSON.parse(req.body.role),
+                state: 'login',
+                user: currentUser
+              });
+            });
+
+        }, (err) => {
+          res.statusCode = 401;
+          res.send({error: 'auth', state: ''});
+        });
+      }, (err) => {
         res.statusCode = 401;
         res.send({error: 'auth', user: '', state: ''});
       });

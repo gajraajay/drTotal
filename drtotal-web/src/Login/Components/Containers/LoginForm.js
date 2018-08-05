@@ -21,7 +21,7 @@ import {
 import Link from 'react-router-dom/Link';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import {NavBar} from '../../../NAV/NavBar';
+import NavBar from '../../../NAV/NavBar';
 import axios from 'axios';
 
 class LoginForm extends Component {
