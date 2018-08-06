@@ -13,14 +13,21 @@ const NavReducer = ( state = initialState, action ) => {
       }
     case REHYDRATE:
       {
+      if(action.payload){
+        if(action.payload.Nav){
+
         return { 
 
             ...action.payload.Nav
         } 
       }
+    }else return{
+        ...state
+      }
+      break;
+      }
     case LOGIN_SUCCESS:
-      {
-        
+      {        
         return { user:action.payload.user,role:action.payload.role}
       }
     case LOGIN_FAIL:

@@ -62,7 +62,7 @@ app.post("/validate-user", function (req, res) {
                           res.send({
                             auth_token: UsersMeta.cookieKey,
                             jwt: res
-                              .jwt({c_session: UsersMeta.cookieKey})
+                              .jwt({c_session: UsersMeta.cookieKey, user_id: User.user_id})
                               .token,
                             role: userRole,
                             status: 1,
@@ -85,7 +85,7 @@ app.post("/validate-user", function (req, res) {
                               res.send({
                                 auth_token: UsersMeta.cookieKey,
                                 jwt: res
-                                  .jwt({c_session: UsersMeta.cookieKey})
+                                  .jwt({c_session: UsersMeta.cookieKey,user_id: User.user_id})
                                   .token,
                                 role: 0,
                                 roles: rolesList,
@@ -135,13 +135,12 @@ app.post("/validate-user", function (req, res) {
                             userId: User.user_id
                           }
                         })
-                          .then(userRole => {
-                            console.log(userRole.Role);
+                          .then(userRole => {                            
                             if (userRole != null) {
                               res.send({
                                 auth_token: authToken,
                                 jwt: res
-                                  .jwt({c_session: cookieKey})
+                                  .jwt({c_session: cookieKey,user_id: User.user_id})
                                   .token,
                                 role: userRole,
                                 status: 1,
@@ -164,7 +163,7 @@ app.post("/validate-user", function (req, res) {
                                   res.send({
                                     auth_token: authToken,
                                     jwt: res
-                                      .jwt({c_session: cookieKey})
+                                      .jwt({c_session: cookieKey,user_id: User.user_id})
                                       .token,
                                     role: 0,
                                     roles: rolesList,
@@ -216,7 +215,7 @@ app.post("/validate-user", function (req, res) {
                   res.send({
                     auth_token: authToken,
                     jwt: res
-                      .jwt({c_session: cookieKey})
+                      .jwt({c_session: cookieKey,user_id: User.user_id})
                       .token,
                     status: 1,
                     user_id: req.body.email
@@ -289,7 +288,7 @@ app.post("/profile", jwt.active(), function (req, res) {
           });
         }).then((result) => {
           User
-            .find({
+            .find({              
             where: {
               user_id: currentUserId
             }
@@ -305,7 +304,7 @@ app.post("/profile", jwt.active(), function (req, res) {
                 user_id: user.user_id
               }
               res.send({
-                role: JSON.parse(req.body.role),
+                role: {...JSON.parse(req.body.role),Role:JSON.parse(req.body.role)},
                 state: 'login',
                 user: currentUser
               });
@@ -323,10 +322,12 @@ app.post("/profile", jwt.active(), function (req, res) {
             });
 
         }, (err) => {
+          console.log('err',err);
           res.statusCode = 401;
           res.send({error: 'auth', state: ''});
         });
       }, (err) => {
+        console.log('err1',err);
         res.statusCode = 401;
         res.send({error: 'auth', user: '', state: ''});
       });

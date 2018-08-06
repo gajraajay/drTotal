@@ -25,6 +25,7 @@ export function CompleteProfile(name, role) {
   var params = new URLSearchParams();
   params.append('token', localStorage.getItem('dt_auth_key'));
   params.append('role', JSON.stringify(role));
+  console.log("profile",role);
   if (name.trim() != "") {
     params.append('name', name);
     axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
