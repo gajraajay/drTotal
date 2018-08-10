@@ -1,7 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import{Row,Col,Panel,Button} from 'react-bootstrap';
-
+import {
+  FloatingMenu,
+  MainButton,
+  ChildButton,
+} from 'react-floating-button-menu';
+import MdAdd from 'react-icons/lib/md/add';
+import MdClose from 'react-icons/lib/md/close';
+ 
 class UserProfile extends Component {
 
   render() {
@@ -20,6 +27,30 @@ class UserProfile extends Component {
         </Panel>
       
       </Col>
+      <FloatingMenu
+    slideSpeed={500}
+    direction="up"
+  >
+    <MainButton
+      iconResting={MdAdd}
+      iconActive={MdClose}
+      iconColor="white"
+      backgroundColor="#009bee"
+      size={56}
+    />
+    <ChildButton
+      iconButton={MdAdd}
+      iconColor="black"
+      backgroundColor="white"
+      size={56}
+    />
+    <ChildButton
+      iconButton={MdAdd}
+      iconColor="black"
+      backgroundColor="white"
+      size={56}
+    />
+  </FloatingMenu>
       </div>
     );
   }
