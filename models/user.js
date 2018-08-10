@@ -33,6 +33,21 @@ const User = sequelize.define("User", {
             isEmail: true
         }
     },
+    auth_token:{
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue:null
+    },
+    scoial_auth_:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        defaultValue:0
+    },
+    auth_type:{
+        type: Sequelize.STRING,
+        allowNull: true,
+        defaultValue:null
+    },
     password: {
         type: Sequelize.STRING,
         allowNull: false
@@ -58,5 +73,17 @@ const User = sequelize.define("User", {
         defaultValue: null
     }
 
+},{
+    getterMethods: {
+        fullName(){
+            return this.firstName+' '+this.lastName
+        }
+    },setterMethods:{
+        fullName(value){
+            const names=value.split(' ');
+            this.setDataValue('firstName', names.slice(0, -1).join(' '));
+            this.setDataValue('lastName', names.slice(-1).join(' '));       
+        }
+    }
 });
 module.exports = User;

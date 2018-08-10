@@ -45,6 +45,8 @@ routes.use('/api/v1/', require('./routes/openRoutes.js'));
 app.use(routes);
 
 app.listen(7071, function () {
+
+
   UserMeta
     .sync()
     .then(function (arg1) {

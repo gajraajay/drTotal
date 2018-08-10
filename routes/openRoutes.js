@@ -37,7 +37,7 @@ app.post("/validate-user", function (req, res) {
       }
     })
       .then(User => {
-
+      
         if (User != null) {
           if (User.password === md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email))) {
 
@@ -230,6 +230,7 @@ app.post("/validate-user", function (req, res) {
             res.send({"status": 0, user_id: req.body.email});
           }
         } else {
+          res.statusCode = 409;
           res.send({"status": 0, user_id: req.body.email});
         }
       }, err => {
