@@ -2,6 +2,7 @@
 var Sequelize = require('sequelize');
 
 module.exports = {
+ 
   up: (queryInterface, Sequelize) => {
     queryInterface.addColumn('Users', 'auth_token', {
       type: Sequelize.STRING,
@@ -24,7 +25,7 @@ module.exports = {
 
   down: (queryInterface, Sequelize) => {
      queryInterface.removeColumn('Users', 'auth_token');
-      queryInterface.addColumn('Users', 'auth_type')
-      return queryInterface.addColumn('Users', 'social_auth');
+      queryInterface.removeColumn('Users', 'auth_type')
+      return queryInterface.removeColumn('Users', 'social_auth');
   }
 };
