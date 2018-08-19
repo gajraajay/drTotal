@@ -37,10 +37,10 @@ app.post("/validate-user", function (req, res) {
       }
     })
       .then(User => {
-      
+        
         if (User != null) {
           if (User.password === md5(md5(req.body.password) + md5(constants.PASS_SALT) + md5(req.body.email))) {
-
+            
             if (req.get('Token')) {
               UserSession
                 .find({
@@ -49,6 +49,7 @@ app.post("/validate-user", function (req, res) {
                 }
               })
                 .then(UsersMeta => {
+                  
                   if (UsersMeta != null) {
                     if (User.user_id == usersMeta.userId) {}
                     UserRole
@@ -85,7 +86,7 @@ app.post("/validate-user", function (req, res) {
                               res.send({
                                 auth_token: UsersMeta.cookieKey,
                                 jwt: res
-                                  .jwt({c_session: UsersMeta.cookieKey,user_id: User.user_id})
+                                  .jwt({c_session: UsersMeta.cookieKey, user_id: User.user_id})
                                   .token,
                                 role: 0,
                                 roles: rolesList,
@@ -104,12 +105,13 @@ app.post("/validate-user", function (req, res) {
                               });
 
                             }, err => {
+                              
                               res.send({error: err, status: 0, user_id: req.body.email});
                             });
                         }
                       }, err => {
-                        console.log("Error");
-                        console.log(err);
+                        
+                        
                       });
 
                   } else {
@@ -126,79 +128,81 @@ app.post("/validate-user", function (req, res) {
                         userId: User.user_id
                       })
                       .then(function (meta) {
-                        UserRole
-                          .find({
-                            include: [{
+                        
+                        UserRole.find({
+                          include: [
+                            {
                               model: roles
-                            }],
+                            }
+                          ],
                           where: {
                             userId: User.user_id
                           }
-                        })
-                          .then(userRole => {                            
-                            if (userRole != null) {
-                              res.send({
-                                auth_token: authToken,
-                                jwt: res
-                                  .jwt({c_session: cookieKey,user_id: User.user_id})
-                                  .token,
-                                role: userRole,
-                                status: 1,
-                                user: {
-                                  contact: User.contact,
-                                  email: User.email,
-                                  firstName: User.firstName,
-                                  id: User.id,
-                                  lastName: User.lastName,
-                                  meta_info: User.meta_info,
-                                  reg_time: User.reg_time,
-                                  user_id: User.user_id
-                                },
-                                user_id: req.body.email
-                              });
-                            } else {
-                              roles
-                                .findAll({})
-                                .then(rolesList => {
-                                  res.send({
-                                    auth_token: authToken,
-                                    jwt: res
-                                      .jwt({c_session: cookieKey,user_id: User.user_id})
-                                      .token,
-                                    role: 0,
-                                    roles: rolesList,
-                                    status: 1,
-                                    user: {
-                                      contact: User.contact,
-                                      email: User.email,
-                                      firstName: User.firstName,
-                                      id: User.id,
-                                      lastName: User.lastName,
-                                      meta_info: User.meta_info,
-                                      reg_time: User.reg_time,
-                                      user_id: User.user_id
-                                    },
-                                    user_id: req.body.email
-                                  });
-
-                                }, err => {
-                                  res.send({error: err, status: 0, user_id: req.body.email});
+                        }).then(userRole => {
+                          if (userRole != null) {
+                            res.send({
+                              auth_token: authToken,
+                              jwt: res
+                                .jwt({c_session: cookieKey, user_id: User.user_id})
+                                .token,
+                              role: userRole,
+                              status: 1,
+                              user: {
+                                contact: User.contact,
+                                email: User.email,
+                                firstName: User.firstName,
+                                id: User.id,
+                                lastName: User.lastName,
+                                meta_info: User.meta_info,
+                                reg_time: User.reg_time,
+                                user_id: User.user_id
+                              },
+                              user_id: req.body.email
+                            });
+                          } else {
+                            roles
+                              .findAll({})
+                              .then(rolesList => {
+                                res.send({
+                                  auth_token: authToken,
+                                  jwt: res
+                                    .jwt({c_session: cookieKey, user_id: User.user_id})
+                                    .token,
+                                  role: 0,
+                                  roles: rolesList,
+                                  status: 1,
+                                  user: {
+                                    contact: User.contact,
+                                    email: User.email,
+                                    firstName: User.firstName,
+                                    id: User.id,
+                                    lastName: User.lastName,
+                                    meta_info: User.meta_info,
+                                    reg_time: User.reg_time,
+                                    user_id: User.user_id
+                                  },
+                                  user_id: req.body.email
                                 });
-                            }
 
-                          }, err => {
-                            console.log("Error");
-                            console.log(err);
+                              }, err => {
+                                
+                                res.send({error: err, status: 0, user_id: req.body.email});
+                              });
+                          }
 
-                          });
+                        }, err => {
+                          
+
+                        });
 
                       }, function (err) {
+                        
                         res.send({error: err, status: 0, user_id: req.body.email});
                       });
                   }
 
                 }, err => {
-                  console.log(err);
+                  
                 });
             } else {
               date = new Date();
@@ -215,13 +219,13 @@ app.post("/validate-user", function (req, res) {
                   res.send({
                     auth_token: authToken,
                     jwt: res
-                      .jwt({c_session: cookieKey,user_id: User.user_id})
+                      .jwt({c_session: cookieKey, user_id: User.user_id})
                       .token,
                     status: 1,
                     user_id: req.body.email
                   });
                 }, function (err) {
-                  console.log(err);
+                  
                   res.send({status: 0, user_id: req.body.email});
                 });
             }
@@ -231,9 +235,11 @@ app.post("/validate-user", function (req, res) {
           }
         } else {
           res.statusCode = 409;
+          
           res.send({"status": 0, user_id: req.body.email});
         }
       }, err => {
+        
         res.statusCode = 409;
         res.send({"status": 0, user_id: req.body.email});
 
@@ -289,7 +295,7 @@ app.post("/profile", jwt.active(), function (req, res) {
           });
         }).then((result) => {
           User
-            .find({              
+            .find({
             where: {
               user_id: currentUserId
             }
@@ -305,7 +311,10 @@ app.post("/profile", jwt.active(), function (req, res) {
                 user_id: user.user_id
               }
               res.send({
-                role: {...JSON.parse(req.body.role),Role:JSON.parse(req.body.role)},
+                role: {
+                  ...JSON.parse(req.body.role),
+                  Role: JSON.parse(req.body.role)
+                },
                 state: 'login',
                 user: currentUser
               });
@@ -323,12 +332,12 @@ app.post("/profile", jwt.active(), function (req, res) {
             });
 
         }, (err) => {
-          console.log('err',err);
+        
           res.statusCode = 401;
           res.send({error: 'auth', state: ''});
         });
       }, (err) => {
-        console.log('err1',err);
+        
         res.statusCode = 401;
         res.send({error: 'auth', user: '', state: ''});
       });
@@ -375,7 +384,7 @@ app.post("/create-user", function (req, res) {
             timeout: (date.getTime() / 1000) + (1000),
             userId: user.user_id
           }, {transaction: t})
-        });
+        })
     }).then((userSession) => {
       roles
         .findAll()
@@ -401,10 +410,12 @@ app.post("/create-user", function (req, res) {
             user_id: req.body.email
           });
         }, function (err) {
+          
           res.statusCode = 409;
           res.send({status: 0, user: {}, user_id: req.body.email});
         });
     }, (err) => {
+      
       res.statusCode = 409;
       res.send({status: 0, user: {}, user_id: req.body.email});
     });
@@ -419,7 +430,7 @@ app.use(function (err, req, res, next) {
   if (err.name == 'JWTExpressError') {
     res.status(401);
   } else {
-    console.log(err);
+    
     res.status(500);
   }
   res.send(err)

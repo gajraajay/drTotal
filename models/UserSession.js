@@ -16,7 +16,6 @@ const UserSession = sequelize.define("UserSession", {
   },
   cookieKey: {
     type: Sequelize.STRING,
-    unique: 'compositeIndex',
     allowNull: false,
     notEmpty: true
   },

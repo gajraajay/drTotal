@@ -50,12 +50,12 @@ app.listen(7071, function () {
   UserMeta
     .sync()
     .then(function (arg1) {
-      console.log(arg1 + "table created");
+      
     });
   User
     .sync()
     .then(function (arg1) {
-      console.log(arg1 + "table created");
+      
     });
   role
     .sync({force: true})
@@ -67,7 +67,7 @@ app.listen(7071, function () {
           roleRules: JSON.stringify(CONSTANTS.DOCTOR_ACL)
         })
         .then(function () {}, function (err) {
-          console.log(err.message);
+          
         });
       roles
         .create({
@@ -76,24 +76,23 @@ app.listen(7071, function () {
           roleRules: JSON.stringify(CONSTANTS.PATIENT_ACL)
         })
         .then(function () {}, function (err) {
-          console.log(err.message);
+          
         });
       roles
         .create({roleId: 0, roleName: "su", roleRules: "{}"})
         .then(function () {}, function (err) {
-          console.log(err.message);
+          
         });
-      console.log(roles + "created");
+      
     })
   user_role
     .sync()
     .then(function (user_roles) {
-      console.log(user_roles + "created");
+      
     });
 
     User.hasMany(user_role, {foreignKey: 'userId'})
     user_role.belongsTo(User, {foreignKey: 'userId'});
-    
     role.hasMany(user_role, {foreignKey: 'roleIds'})
     user_role.belongsTo(role, {foreignKey: 'roleIds'});
 });
