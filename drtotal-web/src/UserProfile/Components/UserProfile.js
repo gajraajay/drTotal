@@ -8,6 +8,15 @@ import {FAB} from '../../FAB/Components/fab';
 import {FabMiniBtn} from '../../FAB/Components/FabMiniBtn';
 class UserProfile extends Component {
 
+  constructor(props) {
+    super(props);
+    this.handleOnclick = this
+      .handleOnclick
+      .bind(this);
+  }
+  handleOnclick(data) {
+    console.log(data.currentTarget.something);
+  }
   render() {
     return (
       <div>
@@ -22,12 +31,15 @@ class UserProfile extends Component {
               <Button>Button</Button>
             </Panel.Body>
           </Panel>
-
         </Col>
+
         <div className="col-xs-12 main-wrapper">
           <FAB>
             <FabMiniBtn
-              tooltip="help"
+              something='as asasg asfas'
+              value='cool thi is fun'
+              onClick={this.handleOnclick}
+              tooltip="click me"
               backgroundImage="https://material.io/tools/icons/static/ic_icons_192px_light.svg"
               backgroundColor="#FFF"
               iconColor='#000'/>
@@ -51,6 +63,11 @@ class UserProfile extends Component {
               backgroundImage="https://material.io/tools/icons/static/ic_icons_192px_light.svg"
               backgroundColor="#FFF"
               iconColor='#000'/>
+            <FabMiniBtn
+              tooltip="help"
+              backgroundColor="#FF5"
+              iconColor='#000'
+              icon="fa-plus"/>
           </FAB>
         </div>
         <div
@@ -60,7 +77,7 @@ class UserProfile extends Component {
           bottom: '10px',
           right: '500px'
         }}>
-          <FAB>
+          {/* <FAB>
             <FabMiniBtn
               tooltip="help"
               backgroundImage="https://material.io/tools/icons/static/ic_icons_192px_light.svg"
@@ -68,7 +85,7 @@ class UserProfile extends Component {
               iconColor='#000'/>
             <FabMiniBtn tooltip="help" backgroundColor="#FF5" iconColor='#000' icon="fa-plus"/>
             <FabMiniBtn
-              tooltip="help"              
+              tooltip="help"
               backgroundColor="#FFF"
               icon="fa-plus"
               iconColor='#000'/>
@@ -82,7 +99,7 @@ class UserProfile extends Component {
               backgroundImage="https://material.io/tools/icons/static/ic_icons_192px_light.svg"
               backgroundColor="#FFF"
               iconColor='#000'/>
-          </FAB>
+          </FAB> */}
         </div>
       </div>
     );
