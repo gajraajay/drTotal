@@ -29,7 +29,7 @@ const DrTotalRouter = (props) => <Router>
 
             return (              
               <div><NavBar/>
-                <UserProfile/>
+                
               </div>
             );
           
@@ -60,7 +60,14 @@ const DrTotalRouter = (props) => <Router>
       component={() => (        
       <LoginPage errorCode=' ' type={props.stage}></LoginPage>
     )}/>
-
+    <Route
+        exact
+        path="/profile"
+        component={() => (
+          <div><NavBar/>
+          <UserProfile/>
+        </div>
+      )}/>
     <Route
     exact
       path="/signup"
@@ -87,5 +94,13 @@ const mapStateToProps = (state, ownProps) => {
     return {}
   }
 };
-
-export const CustomRouter = connect(mapStateToProps, {})(DrTotalRouter);
+const mapDispatchToProps = (dispatch, ownProps) => {
+  
+  return {
+    
+    dispatch: () => {
+      // dispatch(actionCreator)
+    }
+  }
+}
+export const CustomRouter = connect(mapStateToProps,mapDispatchToProps)(DrTotalRouter);

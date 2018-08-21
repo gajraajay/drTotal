@@ -4,7 +4,7 @@ export const FabMiniBtn = (props) => {
   let fabStyle = {
     background: props.backgroundColor,
     color: props.iconColor,
-    'background-image': "url('" + props.backgroundImage + "')"
+    backgroundImage: "url('" + props.backgroundImage + "')"
   }
   return (
     <li

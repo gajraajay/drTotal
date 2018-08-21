@@ -16,6 +16,7 @@ import {
 import {store} from '../Store';
 import {Link} from 'react-router-dom';
 import {Redirect} from 'react-router-dom/Redirect';
+import { withRouter } from 'react-router'
 import {CLEAR} from '../Reducers/RootReducer';
 import {connect} from 'react-redux';
 
@@ -26,9 +27,18 @@ class NavBar extends Component {
 
   handleOnClick = (e) => {
     console.log(e);
+    
+    
   }
 
+  constructor(props,context){
+    super(props,context);
+    console.log(context);
+    this.handleSelect=this.handleSelect.bind(this);
+    
+  }
   handleSelect(e) {
+    console.log(this.props)
     switch (e) {
       case 'signout':
         {
@@ -37,22 +47,25 @@ class NavBar extends Component {
 
           break;
         }
-      default:
-        console.log("we are here");
+      default:{
+        this.props.history.push('/profile');
+      }
     }
 
   }
-  render() {
+  render() {    
     return (
+      
       <Navbar inverse collapseOnSelect>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="/brand">
+            <a href="/">
               <img
                 className="pb-sm"
                 src="https://graphicdesignbylisa.com/wp-content/uploads/generic-logo.jpg"
                 width="100"/>
             </a>
+            {console.log(this.props)}
           </Navbar.Brand>
           <Navbar.Toggle/>
         </Navbar.Header>
@@ -109,4 +122,9 @@ const mapStateToProps = (state, ownProps) => {
   return {props: state.Nav.user}
 
 }
-export default connect(mapStateToProps, {})(NavBar);
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    dispatch:dispatch
+  }
+}
+export default withRouter (connect(mapStateToProps, mapDispatchToProps)(NavBar));
