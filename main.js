@@ -1,4 +1,5 @@
 var express = require("express");
+const UserProfile=require('./models/user_profile.js')
 var routes = require('./routes/routes.js');
 const CONSTANTS = require('./utils/constants.js');
 var app = express();
@@ -88,6 +89,9 @@ app.listen(7071, function () {
   user_role
     .sync()
     .then(function (user_roles) {
+      
+    });
+    UserProfile.sync().then(()=>{
       
     });
 
